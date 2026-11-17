@@ -142,9 +142,9 @@ eligible. Wrapper ancestors can be traversed to reach it; siblings stay excluded
 
 Live QA also found an optional `spaces` navigation provider under the host
 `nav[data-sidebar-navigation-placement="rail"]`, followed by the plugin boundary
-and `app-nav-rail`. Its implementation was neither copied nor inspected.
-The same rail-only exception applies there only while the enclosing host nav is
-in rail mode. A changed plugin ID or marker restores the original labels.
+and `app-nav-rail`. The original review covered only that observed rail.
+The rail exception applies only while the enclosing host nav is in rail mode;
+the separately reviewed Spaces menu/dialog extension is documented below. A changed plugin ID or marker restores the original labels.
 
 ### Official Automations collection
 
@@ -277,3 +277,110 @@ The three picker DOM structures were confirmed live. The Branch plugin
 exception is attribute-only; it grants no text or sibling-plugin translation.
 All outer plugin boundaries must still qualify. Removing a required marker or
 changing plugin identity restores the original accessible name.
+
+## Tasks: reviewed static leaves
+
+Evidence: the shipped MIT Tasks bundle at
+`/Applications/bb.app/Contents/Resources/app.asar.unpacked/node_modules/bb-app/server/dist/builtin-plugins/tasks/dist/app.js`,
+plus live DOM on `/plugins/tasks/tasks`, its task detail route, create dialog,
+status/priority popovers, and navigation tab. The policy is in
+`reviewed-tasks.ts`. Every grant requires the nearest
+`[data-bb-plugin-root][data-bb-plugin="tasks"]`; every enclosing plugin boundary
+must independently qualify. No route-only or plugin-wide text grant is used.
+This also covers the same detail UI mounted in a thread side panel. Message,
+timeline and editor ancestors retain their veto.
+
+- `[data-status-group-header]` with a built-in status enum identifies only a
+  list group heading. Adjacent `[data-task-key]` rows, keys, overlay Open labels,
+  truncated task titles and colored project/label badges remain excluded.
+- The main header's untruncated fixed title, List/Board buttons, sidebar first
+  navigation group, non-button section labels, and Plus/Settings actions are
+  separate scopes. Folder labels are buttons; project and preset names use
+  truncated leaves and dynamic titles. They are not admitted.
+- Filter triggers require the shipped `.h-6.border` shape and fixed icon
+  identities. Only their static label is eligible: `.truncate` selected values
+  remain protected even inside an admitted control. The new-task Labels trigger
+  additionally requires its fixed Plus icon and source button shape; selected
+  labels replace that icon with colored spans and remain excluded even without
+  truncation.
+- Status/priority menu items require the 14-by-14 enum SVG shape; label/project
+  options instead use colored spans. Sort requires the complete three-item
+  Manual/Priority/Due date menu, without user-color or truncated descendants.
+  General menuitem/option roles grant nothing. Compact menu buttons are
+  excluded from the separate fixed-action button exception.
+- Cmdk status/priority options require a fixed Choose status/priority search
+  hint and the built-in `data-value` enum. Only the option's direct truncated
+  label is admitted. Project, label and preset suggestions remain excluded,
+  including their untruncated text. `cmdk-empty` qualifies only without a
+  nested Create button (which can contain a typed name).
+- Static native hints require reviewed Task title/Due date/Base branch labels
+  or fixed source placeholders in the plugin boundary. Only native hint
+  attributes are eligible; native titles, values, textarea content, editable
+  titles and rich editor placeholders stay protected.
+- Form label leaves use the shipped `space-y-1.5 > label.block.text-xs.font-medium`
+  shape. Table headings and management tabs are separate from table bodies.
+  Manage descriptions and empty states require all three generated tab suffixes
+  (`labels`, `presets`, `folders`) and their source-specific paragraph/table
+  branches. Names in rows, saved values, provider/model data and errors stay out.
+- Properties uses direct aside heading/section-label branches. Activity uses
+  its original static aria name, direct h2 and direct empty-state branch.
+  Comment entries, authors, agent identities, thread titles, attachments and
+  system-event text are excluded. The static comment/attachment action aria
+  names are independent attribute grants.
+- Portaled dialogs retain the Tasks plugin boundary. Static title/description
+  leaves are identified through their aria-labelledby/aria-describedby relation
+  and a finite list of source copy. Generated Radix IDs are not hard-coded.
+  Mixed New task · project, Delete label/folder titles and descriptions containing
+  filenames or thread titles stay excluded. Fixed action buttons and Close's
+  direct sr-only leaf qualify separately.
+- Toast text is an arbitrary RPC/error message and stays excluded. Its Dismiss
+  aria name is eligible. Fixed icon aria names and matching static titles can
+  translate without admitting selected names or arbitrary title attributes.
+
+The implementation contains English source-label identity sets, not translations.
+Unknown copy remains English. Scope identity compares original owned text/attributes
+so the translator's own changes cannot revoke or expand permission. Tests include
+user titles, project/label/preset names and comments named Done, Cancel or Save,
+compact menu items, native getter traps, unknown nested plugins, marker changes,
+host updates and conditional restoration.
+
+## Spaces v0.4.1: menu and edit dialog
+
+Evidence: MIT upstream [v0.4.1](https://github.com/tarasenko-by/bb-plugin-spaces/tree/v0.4.1),
+commit `8a12efd80db0253ffed3df30548f308926c674cd`, and live switcher/edit-dialog
+DOM. This extends the existing rail exception; it does not admit the navigation
+plugin as a whole. `lib/portal-scope.ts`, lines 3–14, gives each overlay its own
+`[data-bb-plugin-root][data-bb-plugin="spaces"][data-bb-portaled-overlay]` boundary.
+
+- `app/SpaceSwitcher.tsx`, lines 131–177: the desktop menu has
+  `role="menu"`, `.min-w-52.space-y-px`, and aria-labelledby pointing to
+  `button[data-testid="spaces-switcher"]` in a Spaces boundary. Only its fixed
+  two-item tail qualifies: the final radio label All projects and final menu
+  item Edit Spaces…. User-space radios before that tail remain excluded even
+  if identically named. The switcher's Space: <name> accessible name and selected
+  text remain excluded. The compact menu drawer lacks this proven relationship
+  and deliberately stays excluded.
+- `app/EditSpacesDialog.tsx`, lines 187–446: the edit dialog requires
+  `[data-spaces-sidebar]`, its `.min-h-80` parent, header `.space-y-1.5`, outer
+  More label and `.flex-col-reverse` two-button footer. Only static header,
+  Add space, Icon/Tint/Projects headings, More copy, Save/Cancel/Close and the
+  non-drag drop label qualify. Space rows and project rows remain excluded.
+- `Space name`, Move up/down, and finite built-in Icon/Tint aria names have
+  separate attribute-only grants. No Spaces title or placeholder attributes
+  are admitted. Native values are not read. Delete <name>, project membership
+  text, folder descriptions containing the selected name and selected-space
+  labels remain excluded.
+- The drop label is static only with `.border-border` and without `.border-ring`.
+  During dragging it contains a selected user-space name, so that state revokes
+  the grant. `components/ui/dialog.tsx`, lines 288–310, supplies desktop Close;
+  `responsive-overlay.tsx`, lines 842–890, supplies the reviewed compact edit
+  content wrapper. Both edit layouts are tested.
+
+Plugin scopes are cached only during a scan/flush and invalidated before each
+mutation reconciliation. The observer watches the additional identity, enum,
+portal, icon and relation markers. Scope-affecting mutations rescan the nearest
+reviewed plugin root; switcher changes also revisit Spaces portals. Removing
+required markers restores owned translations, and restoring markers permits a
+new translation. Unknown outer plugins, opt-outs and protected ancestors always
+win. No DOM markers are added, no user entities are changed, and no network or
+persistence is added to the translator.

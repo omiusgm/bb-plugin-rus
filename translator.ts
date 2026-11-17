@@ -1,3 +1,6 @@
+import { tasksScopes, type PluginScopes } from './reviewed-tasks';
+import { spacesScopes } from './reviewed-spaces';
+
 /** Exact-match UI translation. Never reads form values or sends data. */
 export type Dictionary = Readonly<Record<string, string>>;
 
@@ -98,11 +101,36 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
   let queued = false;
   const pending = new Set<Node>();
   let automationScopeCache = new WeakMap<Element, Element[]>();
+  let pluginScopeCache = new WeakMap<Element, PluginScopes>();
 
   function originalAttribute(element: Element, attribute: Attr): string | null {
     const current = element.getAttribute(attribute);
     const change = attributeChanges.get(element)?.get(attribute);
     return change && current === change.translated ? change.original : current;
+  }
+  function originalText(element: Element): string {
+    // Source-label comparisons must survive our own translation. Never inspect
+    // native values, and exclude decorative SVG text from control labels.
+    if (element.matches('input,textarea,select,svg')) return '';
+    return [...element.childNodes].map(node => {
+      if (node.nodeType !== 3) return node.nodeType === 1 ? originalText(node as Element) : '';
+      const change = textChanges.get(node as Text);
+      return change && node.textContent === change.translated ? change.original : node.textContent ?? '';
+    }).join('');
+  }
+  function reviewedScopes(boundary: Element): PluginScopes {
+    let scopes = pluginScopeCache.get(boundary);
+    if (!scopes) {
+      scopes = boundary.getAttribute('data-bb-plugin') === 'tasks'
+        ? tasksScopes(boundary, originalAttribute, originalText)
+        : spacesScopes(boundary, originalAttribute);
+      pluginScopeCache.set(boundary, scopes);
+    }
+    return scopes;
+  }
+  function reviewedBoundary(element: Element): Element | null {
+    const boundary = element.closest(`[${pluginBoundary}]`);
+    return boundary && ['tasks', 'spaces'].includes(boundary.getAttribute('data-bb-plugin') ?? '') ? boundary : null;
   }
   function isStaticLandmarkLabel(element: Element): boolean {
     const label = originalAttribute(element, 'aria-label');
@@ -212,6 +240,8 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
   }
   function canTranslateNativeHint(element: Element): boolean {
     if (!element.matches(NATIVE_HINT_SELECTOR) || isProtected(element, false, true)) return false;
+    const boundary = reviewedBoundary(element);
+    if (boundary && reviewedScopes(boundary).hints.includes(element)) return true;
     if (element.closest('[data-rus-ui]')) return true;
     const label = originalAttribute(element, 'aria-label');
     if (label === 'Search settings' && element.closest('[data-testid="settings-sidebar-body"]')) return true;
@@ -247,6 +277,12 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       if (pluginId === 'environment-project-checkout' &&
         ((staticAttribute && isPickerStaticControl(element)) ||
           (traversal && [...element.querySelectorAll('button')].some(isPickerStaticControl)))) continue;
+      if (pluginId === 'tasks' || pluginId === 'spaces') {
+        const scopes = reviewedScopes(boundary);
+        if (insideScope(element, scopes.text, traversal) ||
+          ((nativeHint || traversal) && insideScope(element, scopes.hints, traversal)) ||
+          ((staticAttribute || traversal) && insideScope(element, scopes.attributes, traversal))) continue;
+      }
       if (pluginId === 'automations' && insideScope(element, automationScopes(boundary), traversal)) continue;
       if (pluginId !== 'navigation' && !spacesInHostRail) return true;
       const rail = element.closest(NAV_RAIL_SELECTOR);
@@ -256,6 +292,14 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       const containsOwnRail = traversal && [...element.querySelectorAll(NAV_RAIL_SELECTOR)]
         .some(candidate => candidate.closest(`[${pluginBoundary}]`) === boundary);
       if (!containsOwnRail) return true;
+    }
+    const reviewed = reviewedBoundary(element);
+    if (reviewed && insideScope(element, reviewedScopes(reviewed).text, false)) {
+      const truncated = element.closest('.truncate');
+      // A control may contain a selected user label. Only an explicitly
+      // reviewed leaf inside that truncated branch can override its boundary.
+      if (!truncated || (reviewedScopes(reviewed).text.includes(truncated) &&
+        !truncated.parentElement?.closest('.truncate'))) return false;
     }
     if (isReasoningCopy(element) || element.matches(MACHINE_COPY_SELECTOR)) return false;
     if (nativeHint && element.matches('.truncate')) return false;
@@ -268,10 +312,30 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
   function isUi(element: Element): boolean {
     if (isProtected(element)) return false;
     const boundary = element.closest(`[${pluginBoundary}]`);
+    if (boundary && ['tasks', 'spaces'].includes(boundary.getAttribute('data-bb-plugin') ?? '') &&
+      insideScope(element, reviewedScopes(boundary).text, false)) return true;
     if (boundary?.getAttribute('data-bb-plugin') === 'automations') return insideScope(element, automationScopes(boundary), false);
     return element.closest(UI_SELECTOR) !== null || isHostStaticUi(element) || isReasoningCopy(element);
   }
   function canTranslateAttribute(element: Element, attribute?: Attr): boolean {
+    const boundary = reviewedBoundary(element);
+    if (boundary) {
+      const scopes = reviewedScopes(boundary);
+      if (element.matches('input,textarea')) return attribute !== 'title' &&
+        (boundary.getAttribute('data-bb-plugin') !== 'spaces' || attribute === 'aria-label') &&
+        scopes.hints.includes(element) && canTranslateNativeHint(element);
+      if (scopes.attributes.includes(element) && !isProtected(element, false, false, true)) {
+        if (attribute === 'aria-label') return true;
+        // Tasks icon titles are static only when they repeat the reviewed aria
+        // name. Spaces grants no title attributes. Selected/user titles stay out.
+        if (attribute === 'title' && boundary.getAttribute('data-bb-plugin') === 'tasks')
+          return originalAttribute(element, 'title') === originalAttribute(element, 'aria-label') ||
+            (element.closest('nav') !== null && ['New project', 'New preset'].includes(originalAttribute(element, 'title') ?? ''));
+      }
+      // Existing rail controls retain their previous policy. Other reviewed
+      // text leaves never implicitly grant arbitrary attributes.
+      if (!element.closest(NAV_RAIL_SELECTOR)) return false;
+    }
     if (element.matches('input,textarea')) return attribute !== 'title' && canTranslateNativeHint(element);
     // These labels describe source-proven host landmarks or controls. Their
     // own static aria name is independent from nested user/plugin content.
@@ -372,6 +436,15 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
     if (disposed) return;
     for (const record of records) {
       pending.add(record.target);
+      if (record.type === 'attributes' || record.type === 'childList') {
+        const element = record.target.nodeType === 1 ? record.target as Element : record.target.parentElement;
+        const boundary = element && reviewedBoundary(element);
+        if (boundary) pending.add(boundary);
+        // A Spaces menu uses its switcher identity outside the portaled root.
+        if (element?.matches('button') && record.type === 'attributes') {
+          for (const overlay of document.querySelectorAll('[data-bb-plugin="spaces"][data-bb-portaled-overlay]')) pending.add(overlay);
+        }
+      }
       for (const node of record.addedNodes) pending.add(node);
     }
     if (queued) return;
@@ -380,6 +453,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       queued = false;
       if (disposed) return;
       automationScopeCache = new WeakMap();
+      pluginScopeCache = new WeakMap();
       reconcile();
       // A childList target already covers its new descendants. Scan each
       // affected branch once instead of revisiting every inserted child.
@@ -406,6 +480,9 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       'data-user-name', 'data-project-name', 'data-promptbox-hide-compact',
       'data-resource-toolbar', 'data-resource-row', 'data-resource-card-pointer-action',
       'data-resource-prompt-content', 'data-app-content-shell', 'id', 'type', 'aria-roledescription',
+      'data-task-key', 'data-status-group-header', 'data-bb-portaled-overlay',
+      'cmdk-root', 'cmdk-input', 'cmdk-item', 'cmdk-empty', 'data-value', 'data-icon', 'viewBox',
+      'aria-haspopup', 'aria-labelledby', 'aria-describedby', 'aria-pressed', 'data-spaces-sidebar',
       'data-machine-row', 'data-updates-domain', 'data-promptbox', 'data-promptbox-action-row',
       'data-promptbox-standard-actions', 'data-promptbox-submit-action',
       'data-app-composer', 'data-promptbox-shell', 'data-new-thread-footer',
