@@ -13,6 +13,15 @@ for (const [en, ru] of entries) {
   assert(!/[\r\n]/.test(en + ru), `Multiline entry: ${en}`);
   assert(Object.hasOwn(provenance.entries, en), `No provenance: ${en}`);
   assert(provenance.entries[en].sources.length > 0, `No upstream source: ${en}`);
+  const sourceRecord = provenance.entries[en];
+  if (sourceRecord.commit) {
+    assert.match(sourceRecord.commit, /^[a-f0-9]{40}$/, `Invalid source commit: ${en}`);
+    assert.deepEqual(sourceRecord.sourceUrls, sourceRecord.sources.map(source => {
+      const match = /^(.*):(\d+)$/.exec(source);
+      assert(match && !match[1].startsWith('/'), `Invalid source location: ${en}`);
+      return `https://github.com/get-bb/bb/blob/${sourceRecord.commit}/${match[1]}#L${match[2]}`;
+    }), `Source URL mismatch: ${en}`);
+  }
   const tokens = text => (text.match(/\$\{[^}]+\}|\{[A-Za-z_][\w.]*\}|%[sd]/g) || []).sort();
   assert.deepEqual(tokens(en), tokens(ru), `Placeholder mismatch: ${en}`);
 }

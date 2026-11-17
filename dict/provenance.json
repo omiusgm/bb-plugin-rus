@@ -3,8 +3,8 @@
   "commit": "da3e60b81d560e114a2bec724bb59c997aaaae7f",
   "license": "MIT",
   "method": "Independent English-only translation using the owner-approved glossary; old Russian dictionaries not supplied.",
-  "reviewed": 1904,
-  "translated": 1769,
+  "reviewed": 1987,
+  "translated": 1852,
   "entries": {
     "(empty message)": {
       "sources": [
@@ -9893,6 +9893,836 @@
         "apps/app/src/components/tools/SkillsBrowse.tsx:38"
       ],
       "review": "Primary-agent review of actual UI label usage"
+    },
+    "Steer": {
+      "sources": [
+        "apps/app/src/views/SettingsView.tsx:608"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/views/SettingsView.tsx#L608"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Install the bb CLI for use outside bb. You can control bb from any terminal, and so can agents outside bb, such as Claude Code or Codex. Threads in bb already have it.": {
+      "sources": [
+        "apps/app/src/components/settings/CliCommandSettingsSection.tsx:27"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/CliCommandSettingsSection.tsx#L27"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Choose services for thread titles, commit messages, and voice input. Automatic prefers bb cloud, then other available services. A service you choose stays selected.": {
+      "sources": [
+        "apps/app/src/components/settings/AiServicesSettingsSection.tsx:206"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/AiServicesSettingsSection.tsx#L206"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Thread titles": {
+      "sources": [
+        "apps/app/src/components/settings/AiServicesSettingsSection.tsx:37"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/AiServicesSettingsSection.tsx#L37"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Commit messages": {
+      "sources": [
+        "apps/app/src/components/settings/AiServicesSettingsSection.tsx:44"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/AiServicesSettingsSection.tsx#L44"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Voice input": {
+      "sources": [
+        "apps/app/src/components/settings/AiServicesSettingsSection.tsx:51"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/AiServicesSettingsSection.tsx#L51"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Default:": {
+      "sources": [
+        "apps/app/src/components/settings/KeyboardSettingsSection.tsx:380"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/KeyboardSettingsSection.tsx#L380"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Search prompts": {
+      "sources": [
+        "plugins/prompt-library/app.tsx:726"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/prompt-library/app.tsx#L726"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Monaco: fold recursively": {
+      "sources": [
+        "plugins/monaco-editor/lib/editor-commands.ts:83"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/monaco-editor/lib/editor-commands.ts#L83"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Monaco: unfold all": {
+      "sources": [
+        "plugins/monaco-editor/lib/editor-commands.ts:86"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/monaco-editor/lib/editor-commands.ts#L86"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Monaco: unfold recursively": {
+      "sources": [
+        "plugins/monaco-editor/lib/editor-commands.ts:89"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/monaco-editor/lib/editor-commands.ts#L89"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Monaco: unfold at cursor": {
+      "sources": [
+        "plugins/monaco-editor/lib/editor-commands.ts:92"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/monaco-editor/lib/editor-commands.ts#L92"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Monaco: sort selected lines ascending": {
+      "sources": [
+        "plugins/monaco-editor/lib/editor-commands.ts:95"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/monaco-editor/lib/editor-commands.ts#L95"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Monaco: sort selected lines descending": {
+      "sources": [
+        "plugins/monaco-editor/lib/editor-commands.ts:101"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/monaco-editor/lib/editor-commands.ts#L101"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Monaco: copy path of current file": {
+      "sources": [
+        "plugins/monaco-editor/lib/editor-commands.ts:107"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/monaco-editor/lib/editor-commands.ts#L107"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Monaco: copy relative path of current file": {
+      "sources": [
+        "plugins/monaco-editor/lib/editor-commands.ts:112"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/monaco-editor/lib/editor-commands.ts#L112"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Browsers": {
+      "sources": [
+        "apps/app/src/components/settings/BrowserSettingsSection.tsx:240"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/BrowserSettingsSection.tsx#L240"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Bring signed-in sessions from a browser on this machine into the BB browser, so previews and agent tabs open already logged in.": {
+      "sources": [
+        "apps/app/src/components/settings/BrowserSettingsSection.tsx:241"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/BrowserSettingsSection.tsx#L241"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Only available in the BB desktop app.": {
+      "sources": [
+        "apps/app/src/components/settings/BrowserSettingsSection.tsx:257"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/BrowserSettingsSection.tsx#L257"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Repositories bb can work in. Drag to change the order projects appear in the sidebar.": {
+      "sources": [
+        "apps/app/src/components/settings/ProjectsSettingsSection.tsx:44"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/ProjectsSettingsSection.tsx#L44"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Add a project": {
+      "sources": [
+        "apps/app/src/components/settings/ProjectsSettingsSection.tsx:293"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/ProjectsSettingsSection.tsx#L293"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "No git remote": {
+      "sources": [
+        "apps/app/src/components/settings/ProjectsSettingsSection.tsx:184"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/ProjectsSettingsSection.tsx#L184"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "server": {
+      "sources": [
+        "apps/app/src/components/settings/MachinesSettingsSection.tsx:145"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachinesSettingsSection.tsx#L145"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "About the bb server": {
+      "sources": [
+        "apps/app/src/components/settings/MachinesSettingsSection.tsx:397"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachinesSettingsSection.tsx#L397"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Connection method": {
+      "sources": [
+        "apps/app/src/components/settings/MachineAccessSettings.tsx:224"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachineAccessSettings.tsx#L224"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Use bb from your phone": {
+      "sources": [
+        "apps/app/src/components/settings/MobileAppSection.tsx:26"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MobileAppSection.tsx#L26"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Accessing bb from your phone": {
+      "sources": [
+        "apps/app/src/components/settings/MobileAppSection.tsx:29"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MobileAppSection.tsx#L29"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Pair your phone": {
+      "sources": [
+        "plugins/connect/app.tsx:720"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/connect/app.tsx#L720"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Scan or enter a code.": {
+      "sources": [
+        "plugins/connect/app.tsx:723"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/connect/app.tsx#L723"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Add mobile device": {
+      "sources": [
+        "plugins/connect/app.tsx:744"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/connect/app.tsx#L744"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Available through TestFlight": {
+      "sources": [
+        "apps/app/src/components/settings/MobileAppSection.tsx:40"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MobileAppSection.tsx#L40"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Join iOS TestFlight": {
+      "sources": [
+        "apps/app/src/components/settings/MobileAppSection.tsx:61"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MobileAppSection.tsx#L61"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Direct download for Android phones": {
+      "sources": [
+        "apps/app/src/components/settings/MobileAppSection.tsx:71"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MobileAppSection.tsx#L71"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Download the APK and open it on your phone to install. Allow installation from your browser if prompted.": {
+      "sources": [
+        "apps/app/src/components/settings/MobileAppSection.tsx:75"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MobileAppSection.tsx#L75"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Google Play access is under review. For now, return here for updates.": {
+      "sources": [
+        "apps/app/src/components/settings/MobileAppSection.tsx:79"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MobileAppSection.tsx#L79"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Download Android APK": {
+      "sources": [
+        "apps/app/src/components/settings/MobileAppSection.tsx:138"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MobileAppSection.tsx#L138"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Mobile app downloads": {
+      "sources": [
+        "apps/app/src/components/settings/MobileAppSection.tsx:22"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MobileAppSection.tsx#L22"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Global variables are available to BB-managed processes on every connected machine. Project variables override them for work in that project.": {
+      "sources": [
+        "apps/app/src/components/settings/MachineEnvironmentSettings.tsx:272"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachineEnvironmentSettings.tsx#L272"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Showing variables for": {
+      "sources": [
+        "apps/app/src/components/settings/MachineEnvironmentSettings.tsx:52"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachineEnvironmentSettings.tsx#L52"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "GitHub is not logged in. Run gh auth login on the server, or add your own GH_TOKEN.": {
+      "sources": [
+        "apps/app/src/components/settings/MachineEnvironmentSettings.tsx:515"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachineEnvironmentSettings.tsx#L515"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Add variable": {
+      "sources": [
+        "apps/app/src/components/settings/MachineEnvironmentSettings.tsx:370"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachineEnvironmentSettings.tsx#L370"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Import from .env": {
+      "sources": [
+        "apps/app/src/components/settings/MachineEnvironmentImportDialog.tsx:36"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachineEnvironmentImportDialog.tsx#L36"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Save variables": {
+      "sources": [
+        "apps/app/src/components/settings/MachineEnvironmentSettings.tsx:401"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachineEnvironmentSettings.tsx#L401"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Automatic GH_TOKEN": {
+      "sources": [
+        "apps/app/src/components/settings/MachineEnvironmentSettings.tsx:496"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachineEnvironmentSettings.tsx#L496"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Clear notifications once a thread is read": {
+      "sources": [
+        "apps/app/src/views/SettingsView.tsx:1128"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/views/SettingsView.tsx#L1128"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "When you read a thread on any device, remove its notifications from your phones and tablets and from open bb windows and tabs. Phones need an app version that supports it.": {
+      "sources": [
+        "apps/app/src/views/SettingsView.tsx:1130"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/views/SettingsView.tsx#L1130"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Faster plugin styles": {
+      "sources": [
+        "apps/app/src/views/SettingsView.tsx:1133"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/views/SettingsView.tsx#L1133"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Load each plugin's stylesheet so it only matches that plugin's own UI, which makes style updates cheaper on pages with many plugins. Plugins built with an old portal-scope helper keep the slower stylesheet. Applies after a reload.": {
+      "sources": [
+        "apps/app/src/views/SettingsView.tsx:1135"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/views/SettingsView.tsx#L1135"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Resume interrupted threads after a restart": {
+      "sources": [
+        "apps/app/src/views/SettingsView.tsx:1148"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/views/SettingsView.tsx#L1148"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "When an update, crash or restart cuts off a running thread or stops a background command a thread is waiting on, bb resumes the thread a few seconds after it comes back and tells the agent what was cut off. Messages you queued meanwhile send after it.": {
+      "sources": [
+        "apps/app/src/views/SettingsView.tsx:1150"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/views/SettingsView.tsx#L1150"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Pushed timeline updates": {
+      "sources": [
+        "apps/app/src/views/SettingsView.tsx:1173"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/views/SettingsView.tsx#L1173"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Send an open thread's timeline changes over the live connection instead of reloading the latest window after each update.": {
+      "sources": [
+        "apps/app/src/views/SettingsView.tsx:1175"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/views/SettingsView.tsx#L1175"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Update when idle": {
+      "sources": [
+        "apps/app/src/views/SettingsView.tsx:1178"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/views/SettingsView.tsx#L1178"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Discover plugins for bb. Install one, or describe your own and build it from a prompt.": {
+      "sources": [
+        "apps/app/src/components/plugin/plugins-collection-copy.ts:2"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/plugin/plugins-collection-copy.ts#L2"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "View all": {
+      "sources": [
+        "apps/app/src/components/plugin/management/BrowsePluginsTab.tsx:394"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/plugin/management/BrowsePluginsTab.tsx#L394"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Find, identify, organize, or archive threads.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:52"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L52"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Change what people see or do inside an open thread.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:57"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L57"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Add, choose, configure, route, or coordinate who runs a thread.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:74"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L74"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Understand or control token, context-window, and provider-quota use.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:85"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L85"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Personalize how bb looks and feels.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:47"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L47"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Browse, open, preview, or edit files and document vaults.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:101"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L101"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Plan, track, route, schedule, or automate work.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:128"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L128"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Work with repositories, builds, changes, pull requests, issues, and reviews.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:96"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L96"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Inspect or control the computers bb runs on.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:117"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L117"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Control durable knowledge or standing context available to agents.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:63"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L63"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Know when work finished, failed, or needs attention.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:90"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L90"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Work with shells and command-line programs inside bb.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:112"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L112"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Create and manage where threads run, locally or in the cloud.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:107"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L107"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Understand, inspect, build, or debug bb and its plugin surfaces.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:123"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L123"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Protect credentials or prevent unsafe code.": {
+      "sources": [
+        "packages/domain/src/plugin-catalog-category.ts:68"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/packages/domain/src/plugin-catalog-category.ts#L68"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Chief of staff": {
+      "sources": [
+        "apps/app/src/components/plugin/browse-hero/browse-hero-archetypes.ts:28"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/plugin/browse-hero/browse-hero-archetypes.ts#L28"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Disable Keep Awake": {
+      "sources": [
+        "plugins/keep-awake/server.ts:179"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/keep-awake/server.ts#L179"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "runs every weekday morning, checks failed main-branch CI, and opens fixer threads only for new failures": {
+      "sources": [
+        "plugins/automations/overview-view.tsx:66"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/automations/overview-view.tsx#L66"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "checks weekly for stale dependencies and opens an update thread when risk is low": {
+      "sources": [
+        "plugins/automations/overview-view.tsx:73"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/automations/overview-view.tsx#L73"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "checks the release branch hourly, summarizes blocking checks, and alerts only when the status changes": {
+      "sources": [
+        "plugins/automations/overview-view.tsx:80"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/automations/overview-view.tsx#L80"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "checks daily for stale worktrees and opens cleanup threads only after they exceed the team's retention window": {
+      "sources": [
+        "plugins/automations/overview-view.tsx:87"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/plugins/automations/overview-view.tsx#L87"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "BB asks before opening links like linear:// in another app. Approvals stay on this device and aren't synced.": {
+      "sources": [
+        "apps/app/src/components/settings/ApplicationLinkApprovalsSettings.tsx:35"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/ApplicationLinkApprovalsSettings.tsx#L35"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Install them into ~/.agents/skills and ~/.claude/skills so agents outside bb can use the bb CLI.": {
+      "sources": [
+        "apps/app/src/components/settings/CliSkillsSettingsSection.tsx:30"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/CliSkillsSettingsSection.tsx#L30"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Updated": {
+      "sources": [
+        "apps/app/src/components/settings/MobileAppSection.tsx:112"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MobileAppSection.tsx#L112"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Download size": {
+      "sources": [
+        "apps/app/src/components/settings/MobileAppSection.tsx:122"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MobileAppSection.tsx#L122"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Automatic variable name": {
+      "sources": [
+        "apps/app/src/components/settings/MachineEnvironmentSettings.tsx:465"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachineEnvironmentSettings.tsx#L465"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Automatic GH_TOKEN value": {
+      "sources": [
+        "apps/app/src/components/settings/MachineEnvironmentSettings.tsx:471"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachineEnvironmentSettings.tsx#L471"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
+    },
+    "Not available": {
+      "sources": [
+        "apps/app/src/components/settings/MachineEnvironmentSettings.tsx:477"
+      ],
+      "commit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "sourceUrls": [
+        "https://github.com/get-bb/bb/blob/7b26cae79ec978fafd0a5db0e8517e94f12eb8f4/apps/app/src/components/settings/MachineEnvironmentSettings.tsx#L477"
+      ],
+      "review": "v1.0.1 live UI audit, independently translated from the pinned official source"
     }
   },
   "excluded": {
@@ -10031,5 +10861,15 @@
     "→ compare side by side": "Действие в демонстрационном мини-приложении",
     "→ fix thread opened": "Статус в демонстрационном мини-приложении",
     "→ rendering first cut": "Статус в демонстрационном мини-приложении"
+  },
+  "releaseReviews": {
+    "1.0.1": {
+      "bbVersion": "0.49.0",
+      "sourceTag": "desktop-v0.49.0",
+      "sourceCommit": "7b26cae79ec978fafd0a5db0e8517e94f12eb8f4",
+      "runtimeReportedCommit": null,
+      "added": 83,
+      "method": "26 live routes/states; exact source literals; unchanged glossary and protected data boundaries"
+    }
   }
 }

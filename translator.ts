@@ -30,7 +30,18 @@ const protectedSelectors = [
 export const PROTECTED_SELECTOR = protectedSelectors.join(',');
 // SVG icon contents remain protected, but their presence must not suppress a
 // button's own accessible label. Other protected descendants still veto it.
-const ATTRIBUTE_CONTENT_SELECTOR = [...protectedSelectors.filter(selector => selector !== 'svg'), `[${pluginBoundary}]`, '.truncate'].join(',');
+const NATIVE_HINT_SELECTOR = 'input:not([type="password"]):not([type="hidden"]),textarea';
+const NON_NATIVE_PROTECTED_SELECTOR = protectedSelectors.filter(selector =>
+  selector !== 'input' && selector !== 'textarea' && selector !== '[role="textbox"]' && selector !== '.font-mono').join(',');
+const ATTRIBUTE_DATA_SELECTOR = [...protectedSelectors.filter(selector => selector !== 'svg'), `[${pluginBoundary}]`].join(',');
+const ATTRIBUTE_CONTENT_SELECTOR = [ATTRIBUTE_DATA_SELECTOR, '.truncate'].join(',');
+// MachineLabel (the first child row) stays excluded. Only the status row and
+// host-rendered badges are eligible, from MachinesSettingsSection.tsx.
+const MACHINE_COPY_SELECTOR = [
+  '[data-settings-anchor="Machines"] [data-machine-row] > a > div > div:nth-child(2) > span:first-child > span.truncate',
+  '[data-settings-anchor="Machines"] [data-machine-row] > a > div > div:nth-child(2) > span:last-child.shrink-0',
+  '[data-settings-anchor="Machines"] [data-machine-row] > a > div > div:first-child > span.rounded-sm.border',
+].join(',');
 const UI_SELECTOR = [
   'button', 'label', 'summary', 'legend',
   '[role="button"]', '[role="menuitem"]', '[role="menuitemcheckbox"]',
@@ -46,6 +57,19 @@ const UI_SELECTOR = [
   // This section's paragraphs are built-in command labels/descriptions.
   '[data-settings-anchor="Keyboard shortcuts"] p',
   '[data-settings-anchor="Keyboard shortcuts"] h3',
+  '[data-settings-anchor="Keyboard shortcuts"] div[aria-label^="Default shortcut"] span',
+  '[data-settings-anchor="Keyboard shortcuts"] span.rounded-sm.border',
+  // Only the built-in empty/list label branches, never app schemes/errors.
+  '[data-settings-anchor="App links"] > div > div:last-child > p.text-subtle-foreground',
+  '[data-settings-anchor="App links"] > div > div:last-child > div > p[id]',
+  '[data-settings-anchor="Configuration"] > div:last-child > div.border-t > div:first-child > h3',
+  '[data-settings-anchor="Configuration"] > div:last-child > div.border-t > div:first-child > p',
+  '[data-settings-anchor="Machines"] [role="note"] > div > p',
+  '[data-settings-anchor="Machines"] [role="note"]',
+  '[data-settings-anchor="Early adopter"] > div:nth-child(2) > h3',
+  '[data-settings-anchor="Early adopter"] > div:nth-child(2) > p',
+  '[data-settings-anchor="Browsers"] > div:last-child > p.text-subtle-foreground',
+  MACHINE_COPY_SELECTOR,
 ].join(',');
 const SAFE_ATTRIBUTES = ['title', 'aria-label', 'placeholder'] as const;
 type Attr = typeof SAFE_ATTRIBUTES[number];
@@ -73,9 +97,139 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
   let disposed = false;
   let queued = false;
   const pending = new Set<Node>();
+  let automationScopeCache = new WeakMap<Element, Element[]>();
 
-  function isProtected(element: Element, traversal = false): boolean {
-    if (element.closest(PROTECTED_SELECTOR)) return true;
+  function originalAttribute(element: Element, attribute: Attr): string | null {
+    const current = element.getAttribute(attribute);
+    const change = attributeChanges.get(element)?.get(attribute);
+    return change && current === change.translated ? change.original : current;
+  }
+  function isStaticLandmarkLabel(element: Element): boolean {
+    const label = originalAttribute(element, 'aria-label');
+    if (label === 'Sidebar navigation') return element.matches('nav[data-sidebar-navigation-placement][data-testid="sidebar-navigation-rail"],nav[data-sidebar-navigation-placement][data-testid="sidebar-navigation-region"]');
+    if (label === 'Machine access') return view!.location.pathname === '/settings/machines' && element.matches('section');
+    if (label === 'Accessing bb from your phone' || label === 'Mobile app downloads') return view!.location.pathname === '/settings/mobile' && element.matches('section');
+    if (label === 'Early adopter') return view!.location.pathname === '/settings/experiments' && element.matches('section[data-settings-anchor="Early adopter"]');
+    if (label === 'Bulk update actions') return view!.location.pathname === '/settings/updates' && element.matches('[data-updates-domain="provider-clis"] [role="toolbar"]');
+    return false;
+  }
+  function isPickerStaticControl(element: Element): boolean {
+    if (!element.matches('button') || !element.closest('[data-app-composer][data-promptbox-shell]')) return false;
+    const label = originalAttribute(element, 'aria-label');
+    if (label === 'Environment') return element.hasAttribute('data-promptbox-shrinkable-control');
+    if (label === 'Permission mode') return Boolean(element.querySelector('[data-promptbox-full-label]') && element.querySelector('[data-promptbox-compact-label]'));
+    return label === 'Branch' && element.matches('[role="combobox"]') && Boolean(element.closest('[data-new-thread-footer]')) &&
+      element.closest(`[${pluginBoundary}]`)?.getAttribute('data-bb-plugin') === 'environment-project-checkout';
+  }
+  function isStaticControl(element: Element): boolean {
+    return isComposerStaticControl(element) || isPickerStaticControl(element);
+  }
+  function isComposerStaticControl(element: Element): boolean {
+    if (!element.matches('button') || !element.closest('[data-promptbox]')) return false;
+    const label = originalAttribute(element, 'aria-label');
+    if (label === 'Prompt actions' || label === 'Start voice input') return Boolean(element.closest('[data-promptbox-action-row]'));
+    if (label === 'Collapse prompt box') return Boolean(element.closest('[data-promptbox-standard-actions]'));
+    if (label === 'Stop run' || label === 'Enter a prompt or attach a file.') return element.hasAttribute('data-promptbox-submit-action');
+    return false;
+  }
+  function isReasoningCopy(element: Element): boolean {
+    // The model label is a sibling without this marker. Never admit it.
+    const label = element.closest('span[data-promptbox-hide-compact].shrink-0');
+    const button = label?.parentElement?.parentElement;
+    return Boolean(button?.matches('button') &&
+      /^Provider, model and reasoning(?: \([^()]+\))?$/.test(originalAttribute(button, 'aria-label') ?? '') &&
+      label?.closest(`[${pluginBoundary}]`)?.getAttribute('data-bb-plugin') === 'bb--composer');
+  }
+  function automationScopes(boundary: Element): Element[] {
+    const cached = automationScopeCache.get(boundary);
+    if (cached) return cached;
+    // Scopes are structural and constant during this scan/flush. Cache even
+    // rejected boundaries; rebuild before the next mutation reconciliation.
+    const scopes: Element[] = [];
+    automationScopeCache.set(boundary, scopes);
+    const tab = boundary.querySelector('button#automations-collection-installed-tab[role="tab"]');
+    const modes = tab?.parentElement?.parentElement?.parentElement;
+    const collection = modes?.parentElement;
+    if (!collection || !modes?.querySelector('button#automations-collection-browse-tab[role="tab"]') ||
+      tab?.closest(`[${pluginBoundary}]`) !== boundary) return scopes;
+    scopes.push(...[tab, modes.querySelector('#automations-collection-browse-tab'),
+      collection.firstElementChild?.querySelector(':scope > div > p')].filter((node): node is Element => Boolean(node)));
+    // Reviewed Create button, not template prompts or arbitrary collection rows.
+    for (const button of modes.querySelectorAll('button')) {
+      if (['New automation', 'New automation options'].includes(originalAttribute(button, 'aria-label') ?? '')) scopes.push(button);
+    }
+    const panel = collection.querySelector('#automations-collection-installed-panel');
+    if (panel) {
+      for (const node of panel.querySelectorAll('[data-resource-toolbar] form[role="search"], [role="status"], [role="alert"]')) {
+        if (!node.closest('[data-resource-row],[data-resource-card-pointer-action],[data-resource-prompt-content]')) scopes.push(node);
+      }
+      for (const button of panel.querySelectorAll('[data-resource-toolbar] button')) {
+        if (['Filters', 'Sort'].includes(originalAttribute(button, 'aria-label') ?? '')) scopes.push(button);
+      }
+    }
+    return scopes;
+  }
+  function insideScope(element: Element, scopes: Element[], traversal: boolean): boolean {
+    return scopes.some(scope => scope === element || scope.contains(element) || (traversal && element.contains(scope)));
+  }
+  function isHostStaticUi(element: Element): boolean {
+    const pathname = view!.location.pathname;
+    if (settingsRoutes.has(pathname) || /^\/settings\/plugins\/[^/]+$/.test(pathname)) {
+      if (element.matches('[data-testid="settings-sidebar-body"] .mt-4 > div.text-xs.font-normal.leading-5')) return true;
+      // Only the fixed Settings route family, never project/plugin page titles.
+      if (element.matches('[data-app-content-shell] [data-testid="app-page-header-content-row"] p.truncate.text-sm.font-semibold')) return true;
+    }
+    if (pathname === '/settings/archived' && element.matches('section.space-y-5 > div:first-child > h2, section.space-y-5 > div:first-child > p')) return true;
+    if (pathname === '/plugins') {
+      // ResourceSourceShelf's header description comes only from known host
+      // category metadata; catalog cards are in the section's second branch.
+      if (element.matches('[data-testid="plugin-browse-shelves"] > section > div:first-child > div:first-child > div:last-child > p')) return true;
+      const hero = element.parentElement;
+      if (element.matches('p') && hero?.matches('#plugins-browse-results section[aria-roledescription="carousel"]') &&
+        originalAttribute(hero, 'aria-label') === 'What you can build with bb plugins') return true;
+    }
+    if (isReviewedSearchForm(element)) return true;
+    const section = element.closest('section[aria-label]');
+    const label = section && originalAttribute(section, 'aria-label');
+    if (label === 'Mobile app downloads') {
+      // Static platform download cards. dl values and plugin-owned mobile UI are excluded.
+      return element === section || element.matches('section > div:first-child > h2, section > div:first-child > p') ||
+        element.matches('section.space-y-5 > div.space-y-5 > section p, section.space-y-5 > div.space-y-5 > section h2, section.space-y-5 > div.space-y-5 > section a, section.space-y-5 > div.space-y-5 > section dt');
+    }
+    if (label === 'Machine access' || label === 'Accessing bb from your phone') {
+      return element === section || element.matches('section > div:first-child > h2, section > div:first-child > p, p.inline-flex.shrink-0.font-medium, a[href^="/settings/plugins/"]');
+    }
+    return false;
+  }
+  function isReviewedSearchForm(element: Element): boolean {
+    if (!element.matches('form[role="search"]')) return false;
+    const label = originalAttribute(element, 'aria-label');
+    const pathname = view!.location.pathname;
+    return ((pathname === '/plugins' || pathname === '/settings/plugins') &&
+      (label === 'Search plugins' || label === 'Search installed plugins')) ||
+      ((pathname === '/skills' || pathname === '/skills/registry') && label === 'Search skills') ||
+      (pathname === '/plugins/automations/automations' && label === 'Search automations');
+  }
+  function canTranslateNativeHint(element: Element): boolean {
+    if (!element.matches(NATIVE_HINT_SELECTOR) || isProtected(element, false, true)) return false;
+    if (element.closest('[data-rus-ui]')) return true;
+    const label = originalAttribute(element, 'aria-label');
+    if (label === 'Search settings' && element.closest('[data-testid="settings-sidebar-body"]')) return true;
+    if (label === 'Search archived threads' && view!.location.pathname === '/settings/archived') return true;
+    if (label === 'Search keyboard shortcuts' && element.closest('[data-settings-anchor="Keyboard shortcuts"]')) return true;
+    if (label === 'New branch prefix' && element.closest('[data-settings-anchor="New branch prefix"]')) return true;
+    if (['Automatic variable name', 'Automatic GH_TOKEN value'].includes(label ?? '') &&
+      element.closest('[data-settings-anchor="Environment variables"]')) return true;
+    if (['Marketplace source', 'Marketplace subdirectory'].includes(label ?? '') &&
+      element.closest('[data-settings-anchor="Plugin marketplaces"]')) return true;
+    // Search forms identify static host hints; values and custom input labels stay untouched.
+    const form = element.closest('form[role="search"]');
+    return form !== null && isReviewedSearchForm(form);
+  }
+  function isProtected(element: Element, traversal = false, nativeHint = false, staticAttribute = false): boolean {
+    if (nativeHint) {
+      if (element.matches(NON_NATIVE_PROTECTED_SELECTOR) || element.parentElement?.closest(PROTECTED_SELECTOR)) return true;
+    } else if (element.closest(PROTECTED_SELECTOR)) return true;
     // Admit the reviewed navigation rail, and the same DOM-observed Spaces
     // integration only within the host's rail navigation container.
     // Walk every enclosing plugin boundary so a nested unknown plugin cannot
@@ -86,6 +240,14 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       const spacesInHostRail = pluginId === 'spaces' && Boolean(
         boundary.parentElement?.closest('nav[data-sidebar-navigation-placement="rail"]'),
       );
+      if (pluginId === 'bb--composer' && (isReasoningCopy(element) ||
+        (staticAttribute && isStaticControl(element)) ||
+        (traversal && ([...element.querySelectorAll('span[data-promptbox-hide-compact].shrink-0')].some(isReasoningCopy) ||
+          [...element.querySelectorAll('button')].some(isStaticControl))))) continue;
+      if (pluginId === 'environment-project-checkout' &&
+        ((staticAttribute && isPickerStaticControl(element)) ||
+          (traversal && [...element.querySelectorAll('button')].some(isPickerStaticControl)))) continue;
+      if (pluginId === 'automations' && insideScope(element, automationScopes(boundary), traversal)) continue;
       if (pluginId !== 'navigation' && !spacesInHostRail) return true;
       const rail = element.closest(NAV_RAIL_SELECTOR);
       if (rail?.closest(`[${pluginBoundary}]`) === boundary) continue;
@@ -95,15 +257,32 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
         .some(candidate => candidate.closest(`[${pluginBoundary}]`) === boundary);
       if (!containsOwnRail) return true;
     }
+    if (isReasoningCopy(element) || element.matches(MACHINE_COPY_SELECTOR)) return false;
+    if (nativeHint && element.matches('.truncate')) return false;
+    if (isHostStaticUi(element)) return false;
     const truncated = element.closest('.truncate');
     if (!truncated) return false;
     const link = truncated.closest('a');
     return !link || !settingsRoutes.has(link.getAttribute('href') ?? '');
   }
   function isUi(element: Element): boolean {
-    return !isProtected(element) && element.closest(UI_SELECTOR) !== null;
+    if (isProtected(element)) return false;
+    const boundary = element.closest(`[${pluginBoundary}]`);
+    if (boundary?.getAttribute('data-bb-plugin') === 'automations') return insideScope(element, automationScopes(boundary), false);
+    return element.closest(UI_SELECTOR) !== null || isHostStaticUi(element) || isReasoningCopy(element);
   }
-  function canTranslateAttribute(element: Element): boolean {
+  function canTranslateAttribute(element: Element, attribute?: Attr): boolean {
+    if (element.matches('input,textarea')) return attribute !== 'title' && canTranslateNativeHint(element);
+    // These labels describe source-proven host landmarks or controls. Their
+    // own static aria name is independent from nested user/plugin content.
+    if (attribute === 'aria-label' && (isStaticLandmarkLabel(element) || isStaticControl(element)) &&
+      !isProtected(element, false, false, true)) return true;
+    if (attribute === 'aria-label' && isReviewedSearchForm(element) && !isProtected(element)) return true;
+    // SettingsWithControl/ChoiceDropdownSetting labels belong to the setting,
+    // even when their selected value is a truncated user/provider name.
+    if (attribute === 'aria-label' && element.matches('button') && isUi(element) &&
+      originalAttribute(element, 'aria-label') === element.closest('[data-settings-anchor]')?.getAttribute('data-settings-anchor') &&
+      !element.querySelector(ATTRIBUTE_DATA_SELECTOR)) return true;
     // A parent control's tooltip can contain its child user title.
     return isUi(element) && !element.querySelector(ATTRIBUTE_CONTENT_SELECTOR);
   }
@@ -137,7 +316,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
   function updateAttributes(element: Element): void {
     for (const attribute of SAFE_ATTRIBUTES) {
       const previous = attributeChanges.get(element)?.get(attribute);
-      if (!element.isConnected || !canTranslateAttribute(element)) {
+      if (!element.isConnected || !canTranslateAttribute(element, attribute)) {
         if (previous) restoreAttribute(element, attribute, previous);
         continue;
       }
@@ -158,12 +337,18 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
     if (root.nodeType === 3) { updateText(root as Text); return; }
     if (root.nodeType !== 1 && root !== document) return;
     if (root.nodeType === 1) {
-      if (isProtected(root as Element, true)) return;
       updateAttributes(root as Element);
+      if (isProtected(root as Element, true)) return;
     }
     const walker = document.createTreeWalker(root, 1 | 4, {
       acceptNode(node) {
-        return node.nodeType === 1 && isProtected(node as Element, true) ? 2 : 1;
+        if (node.nodeType === 1 && isProtected(node as Element, true)) {
+          // Reviewed native hints and static plugin-control aria names get a
+          // separate attribute pass; their protected content stays unvisited.
+          updateAttributes(node as Element);
+          return 2;
+        }
+        return 1;
       },
     });
     let node: Node | null;
@@ -178,8 +363,8 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       if (!node.isConnected || !node.parentElement || !isUi(node.parentElement)) restoreText(node, change);
     }
     for (const [element, changes] of attributeChanges) {
-      if (!element.isConnected || !canTranslateAttribute(element)) {
-        for (const [attribute, change] of changes) restoreAttribute(element, attribute, change);
+      for (const [attribute, change] of changes) {
+        if (!element.isConnected || !canTranslateAttribute(element, attribute)) restoreAttribute(element, attribute, change);
       }
     }
   }
@@ -194,6 +379,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
     view.queueMicrotask(() => {
       queued = false;
       if (disposed) return;
+      automationScopeCache = new WeakMap();
       reconcile();
       // A childList target already covers its new descendants. Scan each
       // affected branch once instead of revisiting every inserted child.
@@ -217,7 +403,13 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       'data-timeline-row-list', 'data-thread-toc', 'data-thread-title',
       'data-thread-row-metadata', 'data-bb-source-code-line-number',
       'data-bb-source-code-viewport', 'data-line', 'data-diff',
-      'data-user-name', 'data-project-name',
+      'data-user-name', 'data-project-name', 'data-promptbox-hide-compact',
+      'data-resource-toolbar', 'data-resource-row', 'data-resource-card-pointer-action',
+      'data-resource-prompt-content', 'data-app-content-shell', 'id', 'type', 'aria-roledescription',
+      'data-machine-row', 'data-updates-domain', 'data-promptbox', 'data-promptbox-action-row',
+      'data-promptbox-standard-actions', 'data-promptbox-submit-action',
+      'data-app-composer', 'data-promptbox-shell', 'data-new-thread-footer',
+      'data-promptbox-shrinkable-control', 'data-promptbox-full-label', 'data-promptbox-compact-label',
     ],
   });
   scan(document.documentElement);
