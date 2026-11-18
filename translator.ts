@@ -1,5 +1,7 @@
 import { tasksScopes, type PluginScopes } from './reviewed-tasks';
 import { spacesScopes } from './reviewed-spaces';
+import { notificationMenuScopes } from './reviewed-notifications';
+import { threadRowMenuScopes } from './reviewed-thread-menu';
 
 /** Exact-match UI translation. Never reads form values or sends data. */
 export type Dictionary = Readonly<Record<string, string>>;
@@ -102,6 +104,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
   const pending = new Set<Node>();
   let automationScopeCache = new WeakMap<Element, Element[]>();
   let pluginScopeCache = new WeakMap<Element, PluginScopes>();
+  let notificationScopeCache: Element[] | null = null;
 
   function originalAttribute(element: Element, attribute: Attr): string | null {
     const current = element.getAttribute(attribute);
@@ -117,6 +120,16 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       const change = textChanges.get(node as Text);
       return change && node.textContent === change.translated ? change.original : node.textContent ?? '';
     }).join('');
+  }
+  function originalNode(node: Text): string {
+    const change = textChanges.get(node);
+    return change && node.data === change.translated ? change.original : node.data;
+  }
+  function notificationScopes(): Element[] {
+    return notificationScopeCache ??= [
+      ...notificationMenuScopes(document, originalNode),
+      ...threadRowMenuScopes(document, originalText),
+    ];
   }
   function reviewedScopes(boundary: Element): PluginScopes {
     let scopes = pluginScopeCache.get(boundary);
@@ -260,6 +273,9 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
     if (nativeHint) {
       if (element.matches(NON_NATIVE_PROTECTED_SELECTOR) || element.parentElement?.closest(PROTECTED_SELECTOR)) return true;
     } else if (element.closest(PROTECTED_SELECTOR)) return true;
+    // Reviewed notifications menu: fixed plugin copy inside truncated leaves.
+    // Ancestors only let the walker reach the item: their own text stays protected.
+    if (!nativeHint && insideScope(element, notificationScopes(), traversal)) return false;
     // Admit the reviewed navigation rail, and the same DOM-observed Spaces
     // integration only within the host's rail navigation container.
     // Walk every enclosing plugin boundary so a nested unknown plugin cannot
@@ -311,6 +327,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
   }
   function isUi(element: Element): boolean {
     if (isProtected(element)) return false;
+    if (insideScope(element, notificationScopes(), false)) return true;
     const boundary = element.closest(`[${pluginBoundary}]`);
     if (boundary && ['tasks', 'spaces'].includes(boundary.getAttribute('data-bb-plugin') ?? '') &&
       insideScope(element, reviewedScopes(boundary).text, false)) return true;
@@ -318,6 +335,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
     return element.closest(UI_SELECTOR) !== null || isHostStaticUi(element) || isReasoningCopy(element);
   }
   function canTranslateAttribute(element: Element, attribute?: Attr): boolean {
+    if (!element.matches('input,textarea') && insideScope(element, notificationScopes(), false)) return true;
     const boundary = reviewedBoundary(element);
     if (boundary) {
       const scopes = reviewedScopes(boundary);
@@ -454,6 +472,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       if (disposed) return;
       automationScopeCache = new WeakMap();
       pluginScopeCache = new WeakMap();
+      notificationScopeCache = null;
       reconcile();
       // A childList target already covers its new descendants. Scan each
       // affected branch once instead of revisiting every inserted child.

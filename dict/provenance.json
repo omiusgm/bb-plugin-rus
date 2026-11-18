@@ -3,8 +3,8 @@
   "commit": "da3e60b81d560e114a2bec724bb59c997aaaae7f",
   "license": "MIT",
   "method": "Independent English-only translation using the owner-approved glossary; old Russian dictionaries not supplied.",
-  "reviewed": 2179,
-  "translated": 2044,
+  "reviewed": 2188,
+  "translated": 2053,
   "entries": {
     "(empty message)": {
       "sources": [
@@ -11682,6 +11682,51 @@
     "· attached": {
       "sources": [
         "get-bb/bb plugins/tasks; bb 0.49.0 builtin-plugins/tasks/dist/app.js"
+      ]
+    },
+    "Notifications": {
+      "sources": [
+        "get-bb/bb plugins/push-notifications; bb 0.49.0 builtin-plugins/push-notifications/dist/app.js"
+      ]
+    },
+    "Same as default": {
+      "sources": [
+        "get-bb/bb plugins/push-notifications; bb 0.49.0 builtin-plugins/push-notifications/dist/app.js"
+      ]
+    },
+    "Needs input only": {
+      "sources": [
+        "get-bb/bb plugins/push-notifications; bb 0.49.0 builtin-plugins/push-notifications/dist/app.js"
+      ]
+    },
+    "Muted": {
+      "sources": [
+        "get-bb/bb plugins/push-notifications; bb 0.49.0 builtin-plugins/push-notifications/dist/app.js"
+      ]
+    },
+    "Limited by a parent thread": {
+      "sources": [
+        "get-bb/bb plugins/push-notifications; bb 0.49.0 builtin-plugins/push-notifications/dist/app.js"
+      ]
+    },
+    "Limited by an ancestor thread": {
+      "sources": [
+        "get-bb/bb plugins/push-notifications; bb 0.49.0 builtin-plugins/push-notifications/dist/app.js"
+      ]
+    },
+    "Some threads are limited by a parent thread": {
+      "sources": [
+        "get-bb/bb plugins/push-notifications; bb 0.49.0 builtin-plugins/push-notifications/dist/app.js"
+      ]
+    },
+    "Notifications unavailable": {
+      "sources": [
+        "get-bb/bb plugins/push-notifications; bb 0.49.0 builtin-plugins/push-notifications/dist/app.js"
+      ]
+    },
+    "Customize actions": {
+      "sources": [
+        "get-bb/bb plugins/thread-list; bb 0.49.0 builtin-plugins/thread-list/dist/app.js"
       ]
     }
   },

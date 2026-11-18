@@ -384,3 +384,32 @@ required markers restores owned translations, and restoring markers permits a
 new translation. Unknown outer plugins, opt-outs and protected ancestors always
 win. No DOM markers are added, no user entities are changed, and no network or
 persistence is added to the translator.
+
+## Thread menus: notifications entry and thread row actions
+
+Evidence: the shipped MIT bundles
+`builtin-plugins/push-notifications/dist/app.js` and
+`builtin-plugins/thread-list/dist/app.js` of BB 0.49.0, plus live DOM of the
+thread header menu and the sidebar row menu (right click and the row action
+button). Policy: `reviewed-notifications.ts` and `reviewed-thread-menu.ts`;
+both feed one scope list in `translator.ts`.
+
+- **Notifications entry.** A `[role="menuitem"][aria-haspopup="menu"]` whose first
+  child is one of the plugin's three level icons (`BellDot`,
+  `push-notifications/ringing`, `push-notifications/off`; the icon changes with
+  the level and may be a masked span, not an svg) and whose label's first text
+  node is exactly `Notifications`. Its own submenu is the `[role="menu"]`
+  labelled by this item's `id`. The sr-only suffix (`, ` plus the level label)
+  is two text nodes, so bare level labels are enough.
+- **Thread row menu.** Direct `[role="menuitem"]` children of a
+  `[role="menu"][data-bb-plugin="thread-list"]` that also contains `Copy link` or
+  `Customize actions`, and only when the item's original text is an exact
+  built-in label (`Open in split`, `Copy link`, `Pin`, `Unpin`, `Mark read`,
+  `Mark unread`, `Rename`, `Regenerate title`, `Customize actions`, `Archive`,
+  `Unarchive`, `Delete`, `View details`). Submenus, `Notify parent, Off`, other
+  plugins' entries and menus without the signature stay English.
+- The plugin-owned parent menu is only walked through to reach these entries;
+  its other text remains protected. Removing a marker restores the original text.
+- Not verified live: the `Limited by a parent thread` / `Limited by an ancestor
+  thread` hints (needs a thread limited by its parent). They are covered by a
+  fixture test only.
