@@ -5,13 +5,18 @@
  * paragraph of the rich editor), and the editor re-renders that attribute on every
  * change. The translator never edits editor DOM, so rewriting the attribute is both
  * forbidden and futile. Instead a stylesheet replaces the drawn text for the exact
- * original placeholder strings only: attribute value must equal a reviewed key, and
- * the paragraph must sit in the prompt editor content. The page DOM, the typed
+ * original placeholder strings only: attribute value must equal a reviewed key, the
+ * paragraph must sit in the prompt editor content and carry bb's `is-editor-empty`
+ * class (the editor is empty as a whole). The page DOM, the typed
  * text and the editor state stay untouched; disposing the translator removes the
  * stylesheet and the English text returns.
  */
 const FAMILIES = ['Ask anything.', 'Ask for a follow-up.'];
-const EDITOR = '[data-promptbox-editor-content] p[data-placeholder="';
+// bb marks the paragraph it draws the placeholder on with `is-editor-empty`: only
+// the first paragraph of a wholly empty editor. A paragraph made by Shift+Enter
+// inside typed text carries `data-placeholder` too, but not this class, and bb draws
+// nothing there. The rule must follow bb's own condition, never `data-placeholder` alone.
+const EDITOR = '[data-promptbox-editor-content] p.is-editor-empty[data-placeholder="';
 
 const cssString = (value: string) => `"${value.replace(/[\\"]/g, '\\$&').replace(/[\r\n]+/g, ' ')}"`;
 

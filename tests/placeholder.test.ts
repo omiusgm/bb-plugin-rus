@@ -15,7 +15,7 @@ const styles = () => [...document.head.querySelectorAll('style')].map(style => s
 it('builds one rule per placeholder of the prompt editor family and nothing else', () => {
   const css = editorPlaceholderCss(words);
   expect(css.split('\n')).toHaveLength(3);
-  expect(css).toContain('[data-promptbox-editor-content] p[data-placeholder="Ask anything."]::before{content:"Задать любой вопрос." !important}');
+  expect(css).toContain('[data-promptbox-editor-content] p.is-editor-empty[data-placeholder="Ask anything."]::before{content:"Задать любой вопрос." !important}');
   expect(css).not.toContain('Закреплено');
   expect(css).not.toContain('Ask a follow-up"');
 });
@@ -30,7 +30,7 @@ it('adds the stylesheet on mount, leaves the editor DOM alone, removes it on dis
   document.body.innerHTML = `<div data-promptbox-editor-content><div contenteditable="true" role="textbox" aria-label="Ask anything." data-placeholder="Ask anything."><p data-placeholder="Ask anything."><br></p></div></div>`;
   const dispose = mountTranslator(document, words);
   disposers.push(dispose);
-  expect(styles()).toContain('p[data-placeholder="Ask anything."]::before{content:"Задать любой вопрос."');
+  expect(styles()).toContain('p.is-editor-empty[data-placeholder="Ask anything."]::before{content:"Задать любой вопрос."');
   const editor = document.querySelector('[role="textbox"]')!;
   const paragraph = document.querySelector('p')!;
   expect(paragraph.getAttribute('data-placeholder')).toBe('Ask anything.');
@@ -38,6 +38,23 @@ it('adds the stylesheet on mount, leaves the editor DOM alone, removes it on dis
   expect(editor.getAttribute('aria-label')).toBe('Ask anything.');
   dispose();
   expect(styles()).toBe('');
+});
+
+const rulesTarget = (css: string) => [...document.querySelectorAll(css.split('::before')[0]!)];
+
+it('applies only to the first paragraph of a wholly empty editor, never to a Shift+Enter paragraph inside text', () => {
+  const key = 'Ask for a follow-up. @ to mention files, folders, sections, or threads';
+  const rule = editorPlaceholderCss(words).split('\n').find(line => line.includes('follow-up. @'))!;
+  const editor = (inner: string) => `<div data-promptbox-editor-content><div contenteditable="true">${inner}</div></div>`;
+  // Empty editor: bb marks the one paragraph with is-editor-empty.
+  document.body.innerHTML = editor(`<p class="is-empty is-editor-empty" data-placeholder="${key}"><br></p>`);
+  expect(rulesTarget(rule)).toHaveLength(1);
+  // Typed text, then Shift+Enter: the new paragraph has data-placeholder but not is-editor-empty.
+  document.body.innerHTML = editor(`<p>abc</p><p class="is-empty" data-placeholder="${key}"><br></p>`);
+  expect(rulesTarget(rule)).toHaveLength(0);
+  // Empty paragraph between two lines of text.
+  document.body.innerHTML = editor(`<p>abc</p><p class="is-empty" data-placeholder="${key}"><br></p><p>def</p>`);
+  expect(rulesTarget(rule)).toHaveLength(0);
 });
 
 it('adds no stylesheet when the dictionary has no placeholder entries', () => {
