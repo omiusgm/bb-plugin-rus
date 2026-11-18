@@ -5,7 +5,7 @@ const words = {
   'Open in split': 'Открыть рядом', 'Copy link': 'Копировать ссылку', Pin: 'Закрепить',
   'Mark read': 'Отметить прочитанным', 'Mark unread': 'Отметить непрочитанным', Rename: 'Переименовать',
   'Regenerate title': 'Создать название заново', 'Customize actions': 'Настроить действия',
-  Archive: 'В архив', Delete: 'Удалить', Notifications: 'Уведомления', Muted: 'Без звука',
+  Archive: 'В архив', Delete: 'Удалить', Notifications: 'Уведомления', Muted: 'Без звука', 'Move to section': 'Переместить в раздел',
 };
 const disposers: (() => void)[] = [];
 function mount(html: string) {
@@ -65,4 +65,10 @@ it('translates the menu together with the notifications entry and restores on di
   expect(document.querySelector('#m')?.textContent).toContain('Настроить действия');
   dispose();
   expect(document.querySelector('#m')?.textContent?.replace(/\s+/g, ' ')).toContain('Copy link Notifications, Muted Customize actions');
+});
+
+it('translates the Move to section entry of the Custom layout row menu', async () => {
+  mount(rowMenu('thread-list', ['Copy link', 'Move to section', 'Customize actions']));
+  await settle();
+  expect(texts()).toEqual(['Копировать ссылку', 'Переместить в раздел', 'Настроить действия']);
 });

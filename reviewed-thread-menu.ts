@@ -10,7 +10,7 @@
  */
 const LABELS = new Set([
   'Open in split', 'Copy link', 'Pin', 'Unpin', 'Mark read', 'Mark unread', 'Rename',
-  'Regenerate title', 'Customize actions', 'Archive', 'Unarchive', 'Delete', 'View details',
+  'Regenerate title', 'Customize actions', 'Move to section', 'Archive', 'Unarchive', 'Delete', 'View details',
 ]);
 const SIGNATURES = ['Copy link', 'Customize actions'];
 

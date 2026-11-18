@@ -105,3 +105,39 @@ it('translates the single item of the rail More menu and nothing else in it', as
   const items = [...document.querySelectorAll('[role="menuitem"]')].map(node => node.textContent);
   expect(items).toEqual(['Настроить навигацию', 'Настроить навигацию', 'Customize navigation']);
 });
+
+const nativeNewThread = `<div data-testid="sidebar-header-slot" data-sidebar-header-slot><div ${plugin('navigation')}>
+  <button type="button" aria-keyshortcuts="Shift+Meta+O" aria-label="New thread (⇧ ⌘ O)">${svg('MessageSquarePlus')}<span>New thread</span></button></div></div>`;
+
+it('translates the built-in New thread button when Spaces is disabled', async () => {
+  mount(nativeNewThread);
+  await settle();
+  const button = document.querySelector('[data-testid="sidebar-header-slot"] button')!;
+  expect(button.textContent).toBe('Новый тред');
+  expect(button.getAttribute('aria-label')).toBe('Новый тред (⇧ ⌘ O)');
+  expect(button.getAttribute('data-rus-original-aria-label')).toBe('New thread (⇧ ⌘ O)');
+});
+
+it('still translates the Spaces New thread button', async () => {
+  mount(sidebar());
+  await settle();
+  expect(document.querySelector('[data-spaces-new-thread-row] button')!.textContent).toBe('Новый тред');
+});
+
+it('keeps lookalike New thread buttons of another plugin and without the icon untouched', async () => {
+  mount(`${nativeNewThread}
+    <div id="foreign" ${plugin('foreign')}><button type="button" aria-keyshortcuts="Shift+Meta+O">${svg('MessageSquarePlus')}<span>New thread</span></button></div>
+    <div data-testid="sidebar-header-slot"><div ${plugin('navigation')}><button type="button" aria-keyshortcuts="Meta+K"><span>New thread</span></button></div></div>`);
+  await settle();
+  expect(document.querySelector('#foreign button')!.textContent).toBe('New thread');
+  expect(document.querySelectorAll('[data-testid="sidebar-header-slot"] button')[1]!.textContent).toBe('New thread');
+});
+
+it('translates the Customize navigation item of the built-in navigation More menu', async () => {
+  document.body.innerHTML = `<div role="menu" ${plugin('navigation')} data-testid="nav-rail-more-menu"><div role="menuitem">${svg('SlidersHorizontal')}Customize navigation</div></div>
+    <div role="menu" ${plugin('navigation')} id="other"><div role="menuitem">Customize navigation</div></div>`;
+  disposers.push(mountTranslator(document, { ...words, 'Customize navigation': 'Настроить навигацию' }));
+  await settle();
+  expect([...document.querySelectorAll('[role="menuitem"]')].map(node => node.textContent))
+    .toEqual(['Настроить навигацию', 'Customize navigation']);
+});

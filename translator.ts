@@ -3,6 +3,7 @@ import { spacesScopes } from './reviewed-spaces';
 import { notificationMenuScopes } from './reviewed-notifications';
 import { threadRowMenuScopes } from './reviewed-thread-menu';
 import { sidebarScopes } from './reviewed-sidebar';
+import { sectionScopes } from './reviewed-sections';
 import { projectMenuScopes } from './reviewed-project-menu';
 import { promptActionsMenuScopes } from './reviewed-composer-menu';
 import { modelPickerScopes } from './reviewed-model-picker';
@@ -143,6 +144,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       ...notificationMenuScopes(document, originalNode),
       ...threadRowMenuScopes(document, originalText),
       ...sidebarScopes(document, originalText),
+      ...sectionScopes(document, originalText, originalAttribute),
       ...projectMenuScopes(document, originalText),
       ...modelPicker().text,
       ...promptActionsMenuScopes(document, originalText, element => originalAttribute(element, 'aria-label')),
