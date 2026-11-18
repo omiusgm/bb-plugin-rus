@@ -207,3 +207,31 @@ it('restores Spaces labels when the enclosing host navigation leaves rail mode',
   await settle();
   expect(button.getAttribute('aria-label')).toBe('Settings');
 });
+
+describe('original aria-label marker', () => {
+  const MARK = 'data-rus-original-aria-label';
+  it('keeps the English aria-label in a data attribute only where it was translated', async () => {
+    mount('<button id="a" aria-label="Cancel" title="Settings">x</button><button id="b" aria-label="Unknown">x</button><button id="c" title="Settings">x</button>');
+    const [a, b, c] = ['a', 'b', 'c'].map(id => document.getElementById(id)!);
+    expect(a.getAttribute('aria-label')).toBe('Отмена');
+    expect(a.getAttribute(MARK)).toBe('Cancel');
+    expect(b.hasAttribute(MARK)).toBe(false);
+    expect(c.hasAttribute(MARK)).toBe(false);
+    expect(a.hasAttribute('data-rus-original-title')).toBe(false);
+  });
+  it('follows a host update and drops the marker when the new value is not translated', async () => {
+    mount('<button id="a" aria-label="Cancel">x</button>');
+    const a = document.getElementById('a')!;
+    a.setAttribute('aria-label', 'Settings'); await settle();
+    expect([a.getAttribute('aria-label'), a.getAttribute(MARK)]).toEqual(['Настройки', 'Settings']);
+    a.setAttribute('aria-label', 'Something else'); await settle();
+    expect([a.getAttribute('aria-label'), a.hasAttribute(MARK)]).toEqual(['Something else', false]);
+  });
+  it('leaves no trace after dispose', () => {
+    const dispose = mount('<button id="a" aria-label="Cancel">x</button>');
+    dispose();
+    const a = document.getElementById('a')!;
+    expect(a.getAttribute('aria-label')).toBe('Cancel');
+    expect(a.hasAttribute(MARK)).toBe(false);
+  });
+});

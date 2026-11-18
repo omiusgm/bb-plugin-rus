@@ -80,6 +80,9 @@ const UI_SELECTOR = [
 const SAFE_ATTRIBUTES = ['title', 'aria-label', 'placeholder'] as const;
 type Attr = typeof SAFE_ATTRIBUTES[number];
 type Change = { original: string; translated: string };
+// Other plugins find elements by the English aria-label. While we show Russian,
+// the English source stays here. Only where aria-label was actually translated.
+export const ORIGINAL_ARIA_LABEL_ATTRIBUTE = 'data-rus-original-aria-label';
 
 /** Only own dictionary entries are copied. Runtime lookup never uses prototypes. */
 export function createLookup(dictionary: Dictionary): ReadonlyMap<string, string> {
@@ -376,6 +379,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
   }
   function restoreAttribute(element: Element, attribute: Attr, change: Change): void {
     if (element.getAttribute(attribute) === change.translated) element.setAttribute(attribute, change.original);
+    if (attribute === 'aria-label') element.removeAttribute(ORIGINAL_ARIA_LABEL_ATTRIBUTE);
     const changes = attributeChanges.get(element);
     changes?.delete(attribute);
     if (!changes?.size) attributeChanges.delete(element);
@@ -408,6 +412,8 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       if (previous && original === previous.translated) continue;
       attributeChanges.get(element)?.delete(attribute);
       if (!attributeChanges.get(element)?.size) attributeChanges.delete(element);
+      // The host replaced the value: the old English source is stale.
+      if (attribute === 'aria-label') element.removeAttribute(ORIGINAL_ARIA_LABEL_ATTRIBUTE);
       if (original === null) continue;
       const translated = translateExact(original, lookup);
       if (translated === null) continue;
@@ -415,6 +421,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       if (!changes) attributeChanges.set(element, changes = new Map());
       changes.set(attribute, { original, translated });
       element.setAttribute(attribute, translated);
+      if (attribute === 'aria-label') element.setAttribute(ORIGINAL_ARIA_LABEL_ATTRIBUTE, original);
     }
   }
   function scan(root: Node): void {

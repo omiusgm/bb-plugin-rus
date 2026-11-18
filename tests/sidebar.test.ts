@@ -52,6 +52,8 @@ it('translates the reviewed fixed sidebar labels', async () => {
   expect(more.getAttribute('aria-label')).toBe('Другие проекты');
   expect(document.querySelector('[data-thread-actions-trigger]')?.getAttribute('aria-label')).toBe('Действия с тредом');
   expect(document.querySelector('[data-sidebar-thread-trailing-indicator] svg')?.getAttribute('aria-label')).toBe('Треду нужен ответ пользователя');
+  expect(document.querySelector('[data-sidebar-thread-trailing-indicator] svg')?.getAttribute('data-rus-original-aria-label')).toBe('Thread needs user input');
+  expect(document.querySelector('[data-thread-actions-trigger]')?.getAttribute('data-rus-original-aria-label')).toBe('Thread actions');
 });
 
 it('keeps names, titles, links and the provider icon label untouched', async () => {
@@ -91,4 +93,5 @@ it('restores all original text and labels when disposed', async () => {
   expect(document.querySelector('[data-sidebar-project-id] p')?.textContent).toBe('No threads');
   expect(document.querySelector('[data-thread-actions-trigger]')?.getAttribute('aria-label')).toBe('Thread actions');
   expect(document.querySelector('[data-sidebar-thread-trailing-indicator] svg')?.getAttribute('aria-label')).toBe('Thread needs user input');
+  expect(document.querySelectorAll('[data-rus-original-aria-label]')).toHaveLength(0);
 });
