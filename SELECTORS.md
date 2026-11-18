@@ -413,3 +413,24 @@ both feed one scope list in `translator.ts`.
 - Not verified live: the `Limited by a parent thread` / `Limited by an ancestor
   thread` hints (needs a thread limited by its parent). They are covered by a
   fixture test only.
+
+## Sidebar fixed labels
+
+Evidence: BB 0.49.0 thread-list plugin bundle and live DOM of the thread
+sidebar. Policy: `reviewed-sidebar.ts`, merged into the same scope list as the
+menus above. Each scope requires a structural marker and, where text is
+translated, the exact original label:
+
+- Spaces new-thread button: `[data-spaces-new-thread-row][data-bb-plugin="spaces"] > div > button[aria-keyshortcuts]`
+  whose text is `New thread`; its `aria-label` carries the shortcut suffix.
+- Empty state: a `p` right after `svg[data-icon="MessageSquare"]` inside a project
+  or visibility group, with the text `No threads`.
+- `button[data-testid="sidebar-thread-list-more-trigger"]` with the text `More`
+  (and its `More projects` aria-label).
+- `[data-sidebar-row-controls] > button[data-thread-actions-trigger]` (aria-label).
+- `[data-sidebar-thread-trailing-indicator]` (status aria-labels such as
+  `Thread working`).
+
+Rows, links, titles, name labels and provider icon labels are not scopes. The
+plugin-owned sidebar is only walked through to reach these controls; everything
+else in it stays protected.
