@@ -5,6 +5,7 @@ import { threadRowMenuScopes } from './reviewed-thread-menu';
 import { sidebarScopes } from './reviewed-sidebar';
 import { projectMenuScopes } from './reviewed-project-menu';
 import { promptActionsMenuScopes } from './reviewed-composer-menu';
+import { modelPickerScopes } from './reviewed-model-picker';
 import { childThreadsBannerScopes, CHILD_THREADS_TOGGLE_ID } from './reviewed-banner';
 
 /** Exact-match UI translation. Never reads form values or sends data. */
@@ -113,6 +114,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
   let automationScopeCache = new WeakMap<Element, Element[]>();
   let pluginScopeCache = new WeakMap<Element, PluginScopes>();
   let hostScopeCache: Element[] | null = null;
+  let modelPickerCache: ReturnType<typeof modelPickerScopes> | null = null;
 
   function originalAttribute(element: Element, attribute: Attr): string | null {
     const current = element.getAttribute(attribute);
@@ -133,12 +135,16 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
     const change = textChanges.get(node);
     return change && node.data === change.translated ? change.original : node.data;
   }
+  function modelPicker() {
+    return modelPickerCache ??= modelPickerScopes(document, originalText, element => originalAttribute(element, 'aria-label'));
+  }
   function hostScopes(): Element[] {
     return hostScopeCache ??= [
       ...notificationMenuScopes(document, originalNode),
       ...threadRowMenuScopes(document, originalText),
       ...sidebarScopes(document, originalText),
       ...projectMenuScopes(document, originalText),
+      ...modelPicker().text,
       ...promptActionsMenuScopes(document, originalText, element => originalAttribute(element, 'aria-label')),
       ...childThreadsBannerScopes(document, originalText, element => originalAttribute(element, 'aria-label')),
     ];
@@ -301,7 +307,8 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
     } else if (element.closest(PROTECTED_SELECTOR)) return true;
     // Reviewed host scopes (notifications menu, thread menu, sidebar labels): fixed copy only.
     // Ancestors only let the walker reach the item: their own text stays protected.
-    if (!nativeHint && insideScope(element, hostScopes(), traversal)) return false;
+    if (!nativeHint && (insideScope(element, hostScopes(), traversal) ||
+      (traversal && modelPicker().attributes.some(scope => scope !== element && element.contains(scope))))) return false;
     // Admit the reviewed navigation rail, and the same DOM-observed Spaces
     // integration only within the host's rail navigation container.
     // Walk every enclosing plugin boundary so a nested unknown plugin cannot
@@ -362,6 +369,8 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
     return element.closest(UI_SELECTOR) !== null || isHostStaticUi(element) || isReasoningCopy(element) || isPermissionModeLabel(element);
   }
   function canTranslateAttribute(element: Element, attribute?: Attr): boolean {
+    // Attribute-only scopes: the element's own label or placeholder, never its content.
+    if (modelPicker().attributes.includes(element)) return attribute !== 'title';
     if (!element.matches('input,textarea') && insideScope(element, hostScopes(), false)) return true;
     const boundary = reviewedBoundary(element);
     if (boundary) {
@@ -504,6 +513,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       automationScopeCache = new WeakMap();
       pluginScopeCache = new WeakMap();
       hostScopeCache = null;
+      modelPickerCache = null;
       reconcile();
       // A childList target already covers its new descendants. Scan each
       // affected branch once instead of revisiting every inserted child.

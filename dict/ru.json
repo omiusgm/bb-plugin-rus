@@ -661,6 +661,7 @@
   "Failed to upload attachment.": "Не удалось загрузить вложение.",
   "Failed workflow:": "Ошибка workflow:",
   "Fast": "Быстро",
+  "Fast mode": "Быстрый режим",
   "Faster plugin styles": "Ускоренная обработка стилей плагинов",
   "Faster responses on supported Opus models at a higher cost per token.": "Более быстрые ответы поддерживаемых моделей Opus с повышенной ценой за токен.",
   "Favicon color": "Цвет значка сайта",

@@ -475,3 +475,17 @@ Composer (`reviewed-composer-menu.ts` and `translator.ts`).
 
 Rail "More" menu (`reviewed-sidebar.ts`): the item `Customize navigation` of
 `[data-testid="nav-rail-more-menu"][data-bb-plugin="spaces"]`.
+
+### Model and reasoning popover (`reviewed-model-picker.ts`)
+
+Evidence: `ModelReasoningMenu.tsx`, `ModelReasoningPicker.tsx`, live DOM. A
+`[role="dialog"][data-bb-plugin="bb--composer"]` is admitted only when it holds both
+`input[role="combobox"]` with the original label `Search models` and
+`[role="listbox"]` labelled `Models`. Admitted element by element:
+text scopes (`Model` heading, `More models` / `Fewer models` toggle label, `Reasoning`
+heading, `button[role="radio"]` reasoning levels by original aria-label, the Fast mode
+switch and its label leaf, the `Handoff to new thread` button); attribute-only scopes
+(own `aria-label` / `placeholder` of the input, the listbox and the radio group).
+Attribute-only elements never admit their content, and the walker passes through
+their ancestors only. Model options, provider buttons and tooltips stay protected;
+`Ultracode` is a mode name and has no dictionary entry.

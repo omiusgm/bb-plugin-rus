@@ -3,8 +3,8 @@
   "commit": "da3e60b81d560e114a2bec724bb59c997aaaae7f",
   "license": "MIT",
   "method": "Independent English-only translation using the owner-approved glossary; old Russian dictionaries not supplied.",
-  "reviewed": 2217,
-  "translated": 2082,
+  "reviewed": 2218,
+  "translated": 2083,
   "entries": {
     "(empty message)": {
       "sources": [
@@ -11884,6 +11884,11 @@
       "sources": [
         "plugins/prompt-library/app.tsx:821",
         "plugins/prompt-library/app.tsx:826"
+      ]
+    },
+    "Fast mode": {
+      "sources": [
+        "apps/app/src/components/pickers/ModelReasoningMenu.tsx:307; label supplied by the provider service tier, observed in live DOM"
       ]
     }
   },
