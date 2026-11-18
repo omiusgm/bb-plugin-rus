@@ -4,6 +4,7 @@ import { notificationMenuScopes } from './reviewed-notifications';
 import { threadRowMenuScopes } from './reviewed-thread-menu';
 import { sidebarScopes } from './reviewed-sidebar';
 import { sectionScopes } from './reviewed-sections';
+import { editorPlaceholderCss } from './reviewed-placeholder';
 import { projectMenuScopes } from './reviewed-project-menu';
 import { promptActionsMenuScopes } from './reviewed-composer-menu';
 import { modelPickerScopes } from './reviewed-model-picker';
@@ -552,9 +553,18 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
     ],
   });
   scan(document.documentElement);
+  // The editor placeholder is CSS-drawn text; see reviewed-placeholder.ts.
+  const placeholderCss = editorPlaceholderCss(dictionary);
+  const placeholderStyle = placeholderCss && document.head ? document.createElement('style') : null;
+  if (placeholderStyle) {
+    placeholderStyle.setAttribute('data-rus-ignore', '');
+    placeholderStyle.textContent = placeholderCss;
+    document.head.append(placeholderStyle);
+  }
   function dispose(): void {
     if (disposed) return;
     disposed = true;
+    placeholderStyle?.remove();
     observer.disconnect();
     pending.clear();
     signal?.removeEventListener('abort', dispose);

@@ -489,3 +489,23 @@ switch and its label leaf, the `Handoff to new thread` button); attribute-only s
 Attribute-only elements never admit their content, and the walker passes through
 their ancestors only. Model options, provider buttons and tooltips stay protected;
 `Ultracode` is a mode name and has no dictionary entry.
+
+## Спящие правила: Spaces и Tasks (решение координатора, 2026-11-18)
+
+Плагины Spaces и Tasks у владельца выключены. Правила для них не удаляются: владелец может включить плагины
+обратно в любой день. Пока плагины выключены, эти правила не срабатывают и ничего не ломают.
+
+- Spaces: `reviewed-spaces.ts` целиком, ветки `spaces` в `translator.ts` (`reviewedBoundary`, `spacesInHostRail`,
+  перерисовка перекрытий Spaces).
+- Tasks: `reviewed-tasks.ts` целиком, ветки `tasks` в `translator.ts`.
+- Всё, что должно работать при любом наборе плагинов, не держится за их разметку: кнопка «Новый тред» и пункт
+  «Настроить навигацию» (`reviewed-sidebar.ts`) привязаны к самой кнопке и к меню рейки.
+
+## Подсказка поля ввода композера
+
+`reviewed-placeholder.ts`. Подсказка («Ask anything. …») рисуется CSS (`content: attr(data-placeholder)` у пустого
+абзаца редактора), а редактор перерисовывает атрибут при любой правке, поэтому DOM редактора переводчик не трогает.
+Вместо этого при монтировании в `<head>` добавляется `<style>` с правилами для точных строк семейства
+«Ask anything.» и «Ask for a follow-up.» внутри `[data-promptbox-editor-content]`; при выключении перевода
+стиль снимается. `aria-label` редактора остаётся английским (читают только экранные читалки).
+
