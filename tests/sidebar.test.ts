@@ -95,3 +95,13 @@ it('restores all original text and labels when disposed', async () => {
   expect(document.querySelector('[data-sidebar-thread-trailing-indicator] svg')?.getAttribute('aria-label')).toBe('Thread needs user input');
   expect(document.querySelectorAll('[data-rus-original-aria-label]')).toHaveLength(0);
 });
+
+it('translates the single item of the rail More menu and nothing else in it', async () => {
+  const withWords = { ...words, 'Customize navigation': 'Настроить навигацию' };
+  document.body.innerHTML = `<div role="menu" data-bb-plugin-root data-bb-plugin="spaces" data-testid="nav-rail-more-menu"><div role="menuitem">${svg('SlidersHorizontal')}Customize navigation</div><div role="menuitem">Customize navigation</div></div>
+    <div role="menu" data-bb-plugin-root data-bb-plugin="spaces" id="other"><div role="menuitem">Customize navigation</div></div>`;
+  disposers.push(mountTranslator(document, withWords));
+  await settle();
+  const items = [...document.querySelectorAll('[role="menuitem"]')].map(node => node.textContent);
+  expect(items).toEqual(['Настроить навигацию', 'Настроить навигацию', 'Customize navigation']);
+});

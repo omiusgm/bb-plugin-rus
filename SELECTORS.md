@@ -434,3 +434,44 @@ translated, the exact original label:
 Rows, links, titles, name labels and provider icon labels are not scopes. The
 plugin-owned sidebar is only walked through to reach these controls; everything
 else in it stays protected.
+
+## Project menu, sidebar view submenus and child-threads banner
+
+Evidence: get-bb/bb tag `desktop-v0.49.0` (MIT): `ProjectActionsMenu.tsx`,
+`SidebarViewItems.tsx`, `ThreadListVisibility.tsx`, `ThreadPromptContextBanner.tsx`,
+and the live DOM of the project menu and the thread page.
+
+Project menu (`reviewed-project-menu.ts`). A `[role="menu"][data-bb-plugin="thread-list"]`
+is admitted only with a signature: a link `a[href^="/settings/projects/"]` labelled
+`Project settings`, or the three items `New section`, `Organize`, `Sort by`. Then only
+direct `menuitem` children with an exact original label (`New section`, `Organize`,
+`Sort by`, `Filter`, `Project settings`, `Rename`, `Hide from list`, `Customize list`,
+`Remove`) and no `.truncate` descendant are scopes. The items `Organize`, `Sort by`
+and `Filter` open submenus: a `[role="menu"][data-bb-plugin="thread-list"]` whose
+`aria-labelledby` is the id of that admitted item is admitted as a whole (it holds
+only fixed copy: group labels, options, the filter tooltip). The menu label
+`<project> actions` carries a user name and is not translated. The selected sort row
+has a `sr-only` span `, descending. Sort ascending` made of several text nodes; it
+stays English (its `aria-label` is translated as a whole string).
+
+Child-threads banner (`reviewed-banner.ts`). Inside `[data-app-composer]` and outside
+any plugin boundary: the leaf `span` with the text `Active child threads` directly in
+`section > button#thread-prompt-banner-child-threads-toggle`, the whole back button with
+`aria-label="Back to active child threads"`, and the `section` landmark `Child threads`
+(attribute only, by the toggle button as its first child). The toggle button itself is
+never a scope: in the collapsed-question state it holds a child title.
+
+Composer (`reviewed-composer-menu.ts` and `translator.ts`).
+- Prompt actions menu: `[role="menu"][data-bb-plugin="bb--composer"]` whose original
+  `aria-label` is `Prompt actions`; a `menuitem` that is a direct child, or the only child of
+  a direct plugin wrapper, with one of `Attach files`, `Skills`, `Plan`, `Automation`,
+  `Prompts…`, `Plugin`. The menu label itself stays English.
+- Static controls (aria-label only): `Submit (Enter)` with `data-promptbox-submit-action`,
+  `Send options` inside `[data-promptbox-send-menu]`, and `Provider, model and reasoning`
+  with an optional `(shortcut)` suffix inside `[data-promptbox-action-row]`.
+- Permission mode value: the `data-promptbox-full-label` / `data-promptbox-compact-label` spans of the
+  Permission mode button, only when their original text is one of `Accept Edits`,
+  `Approve for me`, `Full Access`, `Edits`, `Auto`, `Full`. Other values are provider-supplied.
+
+Rail "More" menu (`reviewed-sidebar.ts`): the item `Customize navigation` of
+`[data-testid="nav-rail-more-menu"][data-bb-plugin="spaces"]`.

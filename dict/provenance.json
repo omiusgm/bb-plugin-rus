@@ -3,8 +3,8 @@
   "commit": "da3e60b81d560e114a2bec724bb59c997aaaae7f",
   "license": "MIT",
   "method": "Independent English-only translation using the owner-approved glossary; old Russian dictionaries not supplied.",
-  "reviewed": 2191,
-  "translated": 2056,
+  "reviewed": 2217,
+  "translated": 2082,
   "entries": {
     "(empty message)": {
       "sources": [
@@ -11742,6 +11742,148 @@
     "More projects": {
       "sources": [
         "get-bb/bb plugins/thread-list and plugins/spaces; bb 0.49.0 sidebar, label observed in live DOM (shortcut-suffixed or templated copy)"
+      ]
+    },
+    "Hide from list": {
+      "sources": [
+        "plugins/thread-list/app/list/ThreadListVisibility.tsx:265"
+      ]
+    },
+    "Customize list": {
+      "sources": [
+        "plugins/thread-list/app/list/ThreadListVisibility.tsx:269"
+      ]
+    },
+    "Filter": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:92",
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:165"
+      ]
+    },
+    "Sections": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:213",
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:214"
+      ]
+    },
+    "Groups": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:235",
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:236"
+      ]
+    },
+    "Rows": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:266",
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:267"
+      ]
+    },
+    "Empty projects": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:201"
+      ]
+    },
+    "By environment": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:246"
+      ]
+    },
+    "By read status": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:259"
+      ]
+    },
+    "Provider icons": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:276"
+      ]
+    },
+    "Metadata": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:290"
+      ]
+    },
+    "Keep at least one filter selected": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:174"
+      ]
+    },
+    "Active child threads": {
+      "sources": [
+        "apps/app/src/components/promptbox/banner/ThreadPromptContextBanner.tsx:478",
+        "apps/app/src/components/promptbox/banner/ThreadPromptContextBanner.tsx:828"
+      ]
+    },
+    "Back to active child threads": {
+      "sources": [
+        "apps/app/src/components/promptbox/banner/ThreadPromptContextBanner.tsx:456"
+      ]
+    },
+    "Updated at, descending. Sort ascending": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:311",
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:326"
+      ]
+    },
+    "Updated at, ascending. Sort descending": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:311",
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:326"
+      ]
+    },
+    "Created at, descending. Sort ascending": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:311",
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:326"
+      ]
+    },
+    "Created at, ascending. Sort descending": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:311",
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:326"
+      ]
+    },
+    "Alphabetical, descending. Sort ascending": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:311",
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:326"
+      ]
+    },
+    "Alphabetical, ascending. Sort descending": {
+      "sources": [
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:311",
+        "plugins/thread-list/app/list/SidebarViewItems.tsx:326"
+      ]
+    },
+    "Search threads (⌘ K)": {
+      "sources": [
+        "apps/app/src/components/sidebar/sidebarNavigationItems.ts:69; bb 0.49.0, shortcut-suffixed label observed in live DOM"
+      ]
+    },
+    "Settings (⌘ ,)": {
+      "sources": [
+        "apps/app/src/components/sidebar/NavRailSettingsButton.tsx:19; bb 0.49.0, shortcut-suffixed label observed in live DOM"
+      ]
+    },
+    "Show right panel (⌘ J)": {
+      "sources": [
+        "apps/app/src/views/thread-detail/ThreadDetailHeader.tsx:182; bb 0.49.0, shortcut-suffixed label observed in live DOM"
+      ]
+    },
+    "Provider, model and reasoning (⇧ ⌘ M)": {
+      "sources": [
+        "apps/app/src/components/pickers/ModelReasoningPicker.tsx:923; bb 0.49.0, shortcut-suffixed label observed in live DOM"
+      ]
+    },
+    "Edits": {
+      "sources": [
+        "apps/app/src/components/pickers/PermissionModePicker.tsx:14"
+      ]
+    },
+    "Prompts…": {
+      "sources": [
+        "plugins/prompt-library/app.tsx:821",
+        "plugins/prompt-library/app.tsx:826"
       ]
     }
   },

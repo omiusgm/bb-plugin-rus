@@ -3,6 +3,9 @@ import { spacesScopes } from './reviewed-spaces';
 import { notificationMenuScopes } from './reviewed-notifications';
 import { threadRowMenuScopes } from './reviewed-thread-menu';
 import { sidebarScopes } from './reviewed-sidebar';
+import { projectMenuScopes } from './reviewed-project-menu';
+import { promptActionsMenuScopes } from './reviewed-composer-menu';
+import { childThreadsBannerScopes, CHILD_THREADS_TOGGLE_ID } from './reviewed-banner';
 
 /** Exact-match UI translation. Never reads form values or sends data. */
 export type Dictionary = Readonly<Record<string, string>>;
@@ -77,6 +80,7 @@ const UI_SELECTOR = [
   '[data-settings-anchor="Browsers"] > div:last-child > p.text-subtle-foreground',
   MACHINE_COPY_SELECTOR,
 ].join(',');
+const PERMISSION_MODE_LABELS: ReadonlySet<string> = new Set(['Accept Edits', 'Approve for me', 'Full Access', 'Edits', 'Auto', 'Full']);
 const SAFE_ATTRIBUTES = ['title', 'aria-label', 'placeholder'] as const;
 type Attr = typeof SAFE_ATTRIBUTES[number];
 type Change = { original: string; translated: string };
@@ -134,6 +138,9 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       ...notificationMenuScopes(document, originalNode),
       ...threadRowMenuScopes(document, originalText),
       ...sidebarScopes(document, originalText),
+      ...projectMenuScopes(document, originalText),
+      ...promptActionsMenuScopes(document, originalText, element => originalAttribute(element, 'aria-label')),
+      ...childThreadsBannerScopes(document, originalText, element => originalAttribute(element, 'aria-label')),
     ];
   }
   function reviewedScopes(boundary: Element): PluginScopes {
@@ -155,6 +162,8 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
     if (label === 'Sidebar navigation') return element.matches('nav[data-sidebar-navigation-placement][data-testid="sidebar-navigation-rail"],nav[data-sidebar-navigation-placement][data-testid="sidebar-navigation-region"]');
     if (label === 'Machine access') return view!.location.pathname === '/settings/machines' && element.matches('section');
     if (label === 'Accessing bb from your phone' || label === 'Mobile app downloads') return view!.location.pathname === '/settings/mobile' && element.matches('section');
+    if (label === 'Child threads') return element.matches('section') && Boolean(element.closest('[data-app-composer]')) &&
+      !element.closest(`[${pluginBoundary}]`) && Boolean(element.querySelector(`:scope > button[id="${CHILD_THREADS_TOGGLE_ID}"]`));
     if (label === 'Early adopter') return view!.location.pathname === '/settings/experiments' && element.matches('section[data-settings-anchor="Early adopter"]');
     if (label === 'Bulk update actions') return view!.location.pathname === '/settings/updates' && element.matches('[data-updates-domain="provider-clis"] [role="toolbar"]');
     return false;
@@ -175,8 +184,20 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
     const label = originalAttribute(element, 'aria-label');
     if (label === 'Prompt actions' || label === 'Start voice input') return Boolean(element.closest('[data-promptbox-action-row]'));
     if (label === 'Collapse prompt box') return Boolean(element.closest('[data-promptbox-standard-actions]'));
-    if (label === 'Stop run' || label === 'Enter a prompt or attach a file.') return element.hasAttribute('data-promptbox-submit-action');
+    if (label === 'Stop run' || label === 'Enter a prompt or attach a file.' || label === 'Submit (Enter)') return element.hasAttribute('data-promptbox-submit-action');
+    if (label === 'Send options') return Boolean(element.closest('[data-promptbox-send-menu]'));
+    // The shortcut suffix is the user's binding; only dictionary keys decide which forms are known.
+    if (/^Provider, model and reasoning(?: \([^()]+\))?$/.test(label ?? '')) return Boolean(element.closest('[data-promptbox-action-row]'));
     return false;
+  }
+  // The selected permission mode shows one of three fixed built-in names (PERMISSION_MODE_OPTIONS
+  // and their compact forms). Other values are provider- or user-supplied and stay protected.
+  function isPermissionModeLabel(element: Element): boolean {
+    if (!element.matches('span[data-promptbox-full-label],span[data-promptbox-compact-label]')) return false;
+    const button = element.closest('button');
+    return Boolean(button && isPickerStaticControl(button) && originalAttribute(button, 'aria-label') === 'Permission mode' &&
+      !element.closest(`[${pluginBoundary}]:not([data-bb-plugin="bb--composer"])`) &&
+      PERMISSION_MODE_LABELS.has(originalText(element).trim()));
   }
   function isReasoningCopy(element: Element): boolean {
     // The model label is a sibling without this marker. Never admit it.
@@ -291,9 +312,10 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       const spacesInHostRail = pluginId === 'spaces' && Boolean(
         boundary.parentElement?.closest('nav[data-sidebar-navigation-placement="rail"]'),
       );
-      if (pluginId === 'bb--composer' && (isReasoningCopy(element) ||
+      if (pluginId === 'bb--composer' && (isReasoningCopy(element) || isPermissionModeLabel(element) ||
         (staticAttribute && isStaticControl(element)) ||
         (traversal && ([...element.querySelectorAll('span[data-promptbox-hide-compact].shrink-0')].some(isReasoningCopy) ||
+          [...element.querySelectorAll('span[data-promptbox-full-label],span[data-promptbox-compact-label]')].some(isPermissionModeLabel) ||
           [...element.querySelectorAll('button')].some(isStaticControl))))) continue;
       if (pluginId === 'environment-project-checkout' &&
         ((staticAttribute && isPickerStaticControl(element)) ||
@@ -322,7 +344,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
       if (!truncated || (reviewedScopes(reviewed).text.includes(truncated) &&
         !truncated.parentElement?.closest('.truncate'))) return false;
     }
-    if (isReasoningCopy(element) || element.matches(MACHINE_COPY_SELECTOR)) return false;
+    if (isReasoningCopy(element) || isPermissionModeLabel(element) || element.matches(MACHINE_COPY_SELECTOR)) return false;
     if (nativeHint && element.matches('.truncate')) return false;
     if (isHostStaticUi(element)) return false;
     const truncated = element.closest('.truncate');
@@ -337,7 +359,7 @@ export function mountTranslator(document: Document, dictionary: Dictionary, sign
     if (boundary && ['tasks', 'spaces'].includes(boundary.getAttribute('data-bb-plugin') ?? '') &&
       insideScope(element, reviewedScopes(boundary).text, false)) return true;
     if (boundary?.getAttribute('data-bb-plugin') === 'automations') return insideScope(element, automationScopes(boundary), false);
-    return element.closest(UI_SELECTOR) !== null || isHostStaticUi(element) || isReasoningCopy(element);
+    return element.closest(UI_SELECTOR) !== null || isHostStaticUi(element) || isReasoningCopy(element) || isPermissionModeLabel(element);
   }
   function canTranslateAttribute(element: Element, attribute?: Attr): boolean {
     if (!element.matches('input,textarea') && insideScope(element, hostScopes(), false)) return true;

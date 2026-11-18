@@ -9,6 +9,8 @@ const dictionary = {
   'Prompt actions': 'Действия с промптом', 'Start voice input': 'Начать запись',
   'Enter a prompt or attach a file.': 'Ввести промпт или прикрепить файл.',
   'Collapse prompt box': 'Свернуть поле', 'Stop run': 'Остановить запуск',
+  'Submit (Enter)': 'Отправить (Enter)', 'Send options': 'Параметры отправки',
+  'Provider, model and reasoning (⇧ ⌘ M)': 'Провайдер, модель и рассуждения (⇧ ⌘ M)',
   Environment: 'Окружение', Branch: 'Ветка', 'Permission mode': 'Режим доступа',
   'Find, identify, organize, or archive threads.': 'Управление тредами.',
   'Discover plugins for bb. Install one, or describe your own and build it from a prompt.': 'Поиск и создание плагинов.',
@@ -74,6 +76,8 @@ const composerControls = [
   ['Prompt actions', ''], ['Start voice input', ''],
   ['Enter a prompt or attach a file.', 'data-promptbox-submit-action'],
   ['Collapse prompt box', ''], ['Stop run', 'data-promptbox-submit-action'],
+  ['Submit (Enter)', 'data-promptbox-submit-action'],
+  ['Provider, model and reasoning (⇧ ⌘ M)', ''],
 ] as const;
 it.each(composerControls)('translates only the source-marked composer control aria name: %s', async (label, marker) => {
   const dispose = mount(`<div data-bb-plugin-root data-bb-plugin="bb--composer"><div data-promptbox><div data-promptbox-action-row data-promptbox-standard-actions><button ${marker} aria-label="${label}" title="Settings"><span class="truncate">Settings</span></button><div contenteditable="true">Settings</div><button aria-label="Settings"><span>Settings</span></button></div></div></div>`);
@@ -120,4 +124,39 @@ it('restores a hero description when its carousel marker is removed', async () =
   document.querySelector('section')!.removeAttribute('aria-roledescription');
   await settle();
   expect(paragraph.textContent).toBe('Discover plugins for bb. Install one, or describe your own and build it from a prompt.');
+});
+
+it('translates the Send options and Provider controls only at their source position', async () => {
+  mount(`<div data-bb-plugin-root data-bb-plugin="bb--composer"><div data-promptbox>
+    <div data-promptbox-action-row><button id="p" aria-label="Provider, model and reasoning (⇧ ⌘ M)"><span class="truncate">Opus 5</span></button></div>
+    <div data-promptbox-send-menu><button id="s" aria-label="Send options"></button></div>
+    <button id="p2" aria-label="Provider, model and reasoning (⇧ ⌘ M)"></button><button id="s2" aria-label="Send options"></button></div></div>`);
+  await settle();
+  const label = (id: string) => document.getElementById(id)!.getAttribute('aria-label');
+  expect(label('p')).toBe('Провайдер, модель и рассуждения (⇧ ⌘ M)');
+  expect(label('s')).toBe('Параметры отправки');
+  expect(label('p2')).toBe('Provider, model and reasoning (⇧ ⌘ M)');
+  expect(label('s2')).toBe('Send options');
+  expect(document.querySelector('#p .truncate')!.textContent).toBe('Opus 5');
+});
+
+const permissionWords = { 'Full Access': 'Полный доступ', Full: 'Полный', Edits: 'Правки', Hidden: 'Скрыто', 'Permission mode': 'Режим доступа' };
+function mountPermission(html: string) {
+  document.body.innerHTML = html;
+  disposers.push(mountTranslator(document, permissionWords));
+}
+const modeButton = (full: string, compact: string, plugin = 'bb--composer') =>
+  `<div data-bb-plugin-root data-bb-plugin="${plugin}"><div data-app-composer data-promptbox-shell><button aria-label="Permission mode"><span title="Permission mode: ${full}"><span class="truncate" data-promptbox-full-label>${full}</span><span class="truncate" data-promptbox-compact-label>${compact}</span></span></button></div></div>`;
+it('translates the three built-in permission mode names in the composer, not other values', async () => {
+  mountPermission(modeButton('Full Access', 'Full') + modeButton('Hidden', 'Edits'));
+  await settle();
+  const spans = [...document.querySelectorAll('.truncate')].map(span => span.textContent);
+  expect(spans).toEqual(['Полный доступ', 'Полный', 'Hidden', 'Правки']);
+  expect(document.querySelector('span[title]')!.getAttribute('title')).toBe('Permission mode: Full Access');
+});
+it('keeps permission mode names in English outside the composer plugin and shell', async () => {
+  mountPermission(modeButton('Full Access', 'Full', 'unknown') +
+    '<button aria-label="Permission mode"><span class="truncate" data-promptbox-full-label>Full Access</span><span class="truncate" data-promptbox-compact-label>Full</span></button>');
+  await settle();
+  expect([...document.querySelectorAll('.truncate')].map(span => span.textContent)).toEqual(Array(4).fill(0).map((_, i) => i % 2 ? 'Full' : 'Full Access'));
 });

@@ -9,7 +9,8 @@
  * - the empty-state paragraph next to the MessageSquare icon;
  * - the "More" row trigger;
  * - a row's actions button (aria-label only);
- * - the status indicator that precedes a row's actions (aria-label only).
+ * - the status indicator that precedes a row's actions (aria-label only);
+ * - the single "Customize navigation" item of the rail's "More" menu (Spaces, MIT).
  * Rows, links, titles and name labels are never scopes.
  */
 export function sidebarScopes(
@@ -35,6 +36,10 @@ export function sidebarScopes(
   }
   for (const indicator of document.querySelectorAll('[data-sidebar-thread-trailing-indicator]')) {
     scopes.push(indicator);
+  }
+  for (const item of document.querySelectorAll(
+    '[role="menu"][data-bb-plugin="spaces"][data-testid="nav-rail-more-menu"] > [role="menuitem"]')) {
+    if (label(item) === 'Customize navigation' && !item.querySelector('.truncate')) scopes.push(item);
   }
   return scopes;
 }
