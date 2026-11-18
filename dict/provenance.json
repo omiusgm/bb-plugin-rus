@@ -3,8 +3,8 @@
   "commit": "da3e60b81d560e114a2bec724bb59c997aaaae7f",
   "license": "MIT",
   "method": "Independent English-only translation using the owner-approved glossary; old Russian dictionaries not supplied.",
-  "reviewed": 2239,
-  "translated": 2104,
+  "reviewed": 2242,
+  "translated": 2107,
   "entries": {
     "(empty message)": {
       "sources": [
@@ -11994,6 +11994,21 @@
     "thread": {
       "sources": [
         "plugins/thread-list (builtin-plugins/thread-list/dist/app.js of the bb 0.49.0 bundle, MIT; read for the Custom layout)"
+      ]
+    },
+    "Notify parent": {
+      "sources": [
+        "apps/app/src/components/secondary-panel/ThreadMetadataContent.tsx; label observed in live DOM, bb 0.49.0"
+      ]
+    },
+    "Open new tab (⌘ T)": {
+      "sources": [
+        "apps/app/src/components/secondary-panel/ThreadSecondaryPanel.tsx:752; shortcut-suffixed label observed in live DOM, bb 0.49.0"
+      ]
+    },
+    "Hide right panel (⌘ J)": {
+      "sources": [
+        "apps/app/src/components/secondary-panel/ThreadSecondaryPanel.tsx:169; shortcut-suffixed label observed in live DOM, bb 0.49.0"
       ]
     }
   },
