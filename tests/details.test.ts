@@ -96,3 +96,15 @@ it('translates the Open new tab and Hide right panel tooltips and keeps the orig
   expect(q('aside button').getAttribute('aria-label')).toBe('Скрыть правую панель (⌘ J)');
   expect(q('aside button').getAttribute('data-rus-original-aria-label')).toBe('Hide right panel (⌘ J)');
 });
+
+const pill = (icon: string, title: string) =>
+  `<div data-tab-pill><button type="button"><span>${svg(icon)}</span><span class="truncate" title="${title}">${title}</span></button><button type="button" aria-label="Close ${title}" data-tab-pill-close="true">${svg('X')}</button></div>`;
+
+it('translates the empty right panel tab, not tabs with other icons or titles', async () => {
+  mount(pill('NewTab', 'New tab') + pill('Globe', 'New tab') + pill('NewTab', 'Project'));
+  await settle();
+  const spans = [...document.querySelectorAll('span.truncate')];
+  expect(spans.map(s => s.textContent)).toEqual(['Новая вкладка', 'New tab', 'Project']);
+  expect(spans[0]!.getAttribute('title')).toBe('Новая вкладка');
+  expect(document.querySelector('[data-tab-pill-close]')!.getAttribute('aria-label')).toBe('Close New tab');
+});

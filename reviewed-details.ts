@@ -6,6 +6,7 @@
  *   same rows and stay untouched: only exact original text in a leaf is admitted.
  * - The composer project button: the "No project" label (both full and compact
  *   copies). A selected project name is the same leaf, so exact text decides.
+ * - The "New tab" pill of an empty right panel tab.
  * - The "Parent" chip above the composer (the word only; the thread link is protected).
  * - The "Working..." line of the thread timeline, one leaf that is the only child of
  *   its line, outside messages and timeline rows (those stay protected anyway).
@@ -38,6 +39,14 @@ export function detailsScopes(
     '[data-app-composer] button[data-promptbox-project-control] [data-promptbox-full-label],' +
     '[data-app-composer] button[data-promptbox-project-control] [data-promptbox-compact-label]')) {
     if (leaf.children.length === 0 && text(leaf) === 'No project') scopes.push(leaf);
+  }
+
+  // Right panel tab pill of an empty tab: the NewTab icon plus the fixed title. Pills of
+  // real tabs carry page or file names, so the icon and the exact text decide.
+  for (const leaf of document.querySelectorAll('[data-tab-pill] > button > span.truncate[title]')) {
+    const icon = leaf.previousElementSibling?.querySelector('svg[data-icon="NewTab"]');
+    if (icon && leaf.children.length === 0 && text(leaf) === 'New tab' &&
+      originalAttribute(leaf, 'title') === 'New tab') scopes.push(leaf);
   }
 
   // "Parent <thread>" chip above the composer: the span holds the word and the link.
